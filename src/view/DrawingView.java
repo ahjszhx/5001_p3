@@ -251,6 +251,7 @@ public class DrawingView implements PropertyChangeListener {
         JButton rotationButton = createLeftButton("Rotate Shape");
         rotationButton.addActionListener(e -> {
             //drawingController.controlClear();
+            drawingAreaPanel.setRotationAngle(0);
             drawingAreaPanel.rotateSelectedShape();
             mainFrame.repaint();
         });

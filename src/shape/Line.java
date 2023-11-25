@@ -33,22 +33,33 @@ public class Line extends Shape {
     @Override
     public void rotate(double angle) {
         // 计算旋转后的新坐标
-        double startX = startPoint.getX();
-        double startY = startPoint.getY();
-        double endX = endPoint.getX();
-        double endY = endPoint.getY();
+        // Find the midpoint of the line
+        double midX = (startPoint.getX() + endPoint.getX()) / 2;
+        double midY = (startPoint.getY() + endPoint.getY()) / 2;
 
-        // 将角度转换为弧度
+        // Translate so that the midpoint becomes the origin
+        double startXTranslated = startPoint.getX() - midX;
+        double startYTranslated = startPoint.getY() - midY;
+        double endXTranslated = endPoint.getX() - midX;
+        double endYTranslated = endPoint.getY() - midY;
+
+        // Convert the angle to radians
         double radians = Math.toRadians(angle);
 
-        // 计算旋转后的新坐标
-        double newX1 = Math.cos(radians) * (startX - endX) - Math.sin(radians) * (startY - endY) + endX;
-        double newY1 = Math.sin(radians) * (startX - endX) + Math.cos(radians) * (startY - endY) + endY;
+        // Apply rotation
+        double newX1 = startXTranslated * Math.cos(radians) - startYTranslated * Math.sin(radians);
+        double newY1 = startXTranslated * Math.sin(radians) + startYTranslated * Math.cos(radians);
 
-        double newX2 = Math.cos(radians) * (endX - startX) - Math.sin(radians) * (endY - startY) + startX;
-        double newY2 = Math.sin(radians) * (endX - startX) + Math.cos(radians) * (endY - startY) + startY;
+        double newX2 = endXTranslated * Math.cos(radians) - endYTranslated * Math.sin(radians);
+        double newY2 = endXTranslated * Math.sin(radians) + endYTranslated * Math.cos(radians);
 
-        // 设置旋转后的新坐标
+        // Translate back to the original position
+        newX1 += midX;
+        newY1 += midY;
+        newX2 += midX;
+        newY2 += midY;
+
+        // Set the new coordinates
         startPoint.setLocation(newX1, newY1);
         endPoint.setLocation(newX2, newY2);
     }

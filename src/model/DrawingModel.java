@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class DrawingModel {
-    //    private Stack<ArrayList<Shape>> undoStack;
-//    private Stack<ArrayList<Shape>> redoStack;
+
     private Stack<DrawingAction> undoStack;
     private Stack<DrawingAction> redoStack;
     private final PropertyChangeSupport notifier;
@@ -49,6 +48,11 @@ public class DrawingModel {
         DrawingAction action = new DrawingAction(DrawingAction.ActionType.UPDATE, prevShape);
         redoStack.clear();
         undoStack.push(action);
+        for (Shape shape : shapeList) {
+            if(shape.getInnerId().equals(updatedShape.getInnerId())){
+                shapeList.set(shapeList.indexOf(shape),updatedShape);
+            }
+        }
         update();
     }
 

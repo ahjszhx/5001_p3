@@ -5,6 +5,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -120,4 +121,16 @@ public abstract class Shape implements Serializable {
     public abstract Shape clone();
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shape)) return false;
+        Shape shape = (Shape) o;
+        return Float.compare(shape.getBorderWidth(), getBorderWidth()) == 0 && Objects.equals(getInnerId(), shape.getInnerId()) && getStartPoint().equals(shape.getStartPoint()) && getEndPoint().equals(shape.getEndPoint()) && getBorderColorModel().equals(shape.getBorderColorModel()) && getFillColorModel().equals(shape.getFillColorModel());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getInnerId(), getStartPoint(), getEndPoint(), getBorderColorModel(), getFillColorModel(), getBorderWidth());
+    }
 }

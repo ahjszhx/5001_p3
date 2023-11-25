@@ -6,8 +6,10 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.util.HashMap;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 
 public class Ellipse extends Shape {
@@ -41,8 +43,24 @@ public class Ellipse extends Shape {
 
     @Override
     public void rotate(double rotationAngle) {
+        // 计算椭圆的中心坐标
+        double centerX = startPoint.getX() + (endPoint.getX() - startPoint.getX()) / 2.0;
+        double centerY = startPoint.getY() + (endPoint.getY() - startPoint.getY()) / 2.0;
 
+        // 将角度转换为弧度
+        double radians = Math.toRadians(rotationAngle);
+
+        // 创建旋转变换
+        AffineTransform transform = AffineTransform.getRotateInstance(radians, centerX, centerY);
+
+        // 更新椭圆的位置
+        Point2D newStartPoint = transform.transform(new Point2D.Double(startPoint.getX(), startPoint.getY()), null);
+        Point2D newEndPoint = transform.transform(new Point2D.Double(endPoint.getX(), endPoint.getY()), null);
+
+        startPoint.setLocation(newStartPoint);
+        endPoint.setLocation(newEndPoint);
     }
+
 
     @Override
     public boolean contains(Point point) {
