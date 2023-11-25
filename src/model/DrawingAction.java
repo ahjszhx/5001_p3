@@ -46,4 +46,15 @@ public class DrawingAction implements Serializable {
     public void setPrevShape(Shape prevShape) {
         this.prevShape = prevShape;
     }
+
+    @Override
+    public DrawingAction clone() {
+        DrawingAction clonedAction;
+        if (prevShape != null) {
+            clonedAction = new DrawingAction(actionType, currentShape.clone(), prevShape.clone());
+        } else {
+            clonedAction = new DrawingAction(actionType, currentShape.clone());
+        }
+        return clonedAction;
+    }
 }

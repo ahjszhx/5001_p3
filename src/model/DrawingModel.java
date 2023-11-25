@@ -136,14 +136,11 @@ public class DrawingModel {
     public void undo() {
         if (!undoStack.isEmpty()) {
             DrawingAction action = undoStack.pop();
-            redoStack.push(action);
+            DrawingAction redoAction = action.clone();
+            redoStack.push(redoAction);
             applyReverseAction(action);
             update();
-//            if(action.getActionType().equals(DrawingAction.ActionType.UPDATE)){
-//                DrawingAction prevAction = undoStack.get(undoStack.size()-1);
-//                Shape shape = prevAction.getShape();
-//                action.setShape(shape);
-//            }
+
 
             // Apply the reverse of the action
 
@@ -177,7 +174,6 @@ public class DrawingModel {
         shapeList.clear();  // Clear the existing shapes instead of creating a new ArrayList
         update();
     }
-
 
     public List<Shape> getShapeList() {
         return shapeList;
