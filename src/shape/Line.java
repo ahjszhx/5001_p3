@@ -158,14 +158,6 @@ public class Line extends Shape {
         this.lineWidth = lineWidth;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Line)) return false;
-        Line line = (Line) o;
-        return getStartPoint() == line.getStartPoint() && getEndPoint() == line.getEndPoint() &&
-                getX2() == line.getX2() && getY2() == line.getY2() && getLineWidth() == line.getLineWidth() && getLineColor().equals(line.getLineColor());
-    }
 
     @Override
     public Line clone() {

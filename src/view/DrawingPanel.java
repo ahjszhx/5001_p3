@@ -168,8 +168,8 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             // Push the changes to the undo stack
             //controller.updateShapeList(shapeList);
             if (rotationAngle == 0) {
-                selectedShape = null;
                 controller.updateShape(selectedShape, prevShape);
+                selectedShape = null;
             }
         } else {
             Shape shape = ShapeFactory.createShape(this.drawMode, this.startPoint, endPoint, borderColor, fillColor, borderWidth);

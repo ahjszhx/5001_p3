@@ -45,7 +45,7 @@ public class DrawingModel {
 
 
     public void updateShape(Shape updatedShape, Shape prevShape) {
-        DrawingAction action = new DrawingAction(DrawingAction.ActionType.UPDATE, prevShape);
+        DrawingAction action = new DrawingAction(DrawingAction.ActionType.UPDATE, updatedShape,prevShape);
         redoStack.clear();
         undoStack.push(action);
         for (Shape shape : shapeList) {
@@ -137,10 +137,16 @@ public class DrawingModel {
         if (!undoStack.isEmpty()) {
             DrawingAction action = undoStack.pop();
             redoStack.push(action);
-
-            // Apply the reverse of the action
             applyReverseAction(action);
             update();
+//            if(action.getActionType().equals(DrawingAction.ActionType.UPDATE)){
+//                DrawingAction prevAction = undoStack.get(undoStack.size()-1);
+//                Shape shape = prevAction.getShape();
+//                action.setShape(shape);
+//            }
+
+            // Apply the reverse of the action
+
         }
     }
 
@@ -180,11 +186,11 @@ public class DrawingModel {
     private void applyAction(DrawingAction action) {
         switch (action.getActionType()) {
             case ADD:
-                shapeList.add(action.getShape());
+                shapeList.add(action.getCurrentShape());
                 break;
             case UPDATE:
                 // Update the shape in the list
-                Shape updatedShape = action.getShape();
+                Shape updatedShape = action.getCurrentShape();
                 for (Shape realShape : shapeList) {
                     if (updatedShape.getInnerId().equals(realShape.getInnerId())) {
                         realShape.setStartPoint(updatedShape.getStartPoint());
@@ -199,11 +205,11 @@ public class DrawingModel {
     private void applyReverseAction(DrawingAction action) {
         switch (action.getActionType()) {
             case ADD:
-                shapeList.remove(action.getShape());
+                shapeList.remove(action.getCurrentShape());
                 break;
             case UPDATE:
                 // Reverse the update operation
-                Shape originalShape = action.getShape();
+                Shape originalShape = action.getPrevShape();
                 for (Shape realShape : shapeList) {
                     if (originalShape.getInnerId().equals(realShape.getInnerId())) {
                         realShape.setStartPoint(originalShape.getStartPoint());
