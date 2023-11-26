@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+/**
+ * The DrawingPanel class represents the panel where shapes are drawn and manipulated.
+ */
 public class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener {
 
     private final int width;
@@ -30,10 +34,16 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
     private Shape initialSelectedShapeState;
     private Shape prevShape;
     private Point lastMousePoint;
-    private String colorChosenMode;
+    private String colorChosenModel;
     private double rotationAngle;
 
-
+    /**
+     * Constructs a DrawingPanel with the specified dimensions and controller.
+     *
+     * @param width      The width of the panel.
+     * @param height     The height of the panel.
+     * @param controller The controller for handling interactions.
+     */
     public DrawingPanel(int width, int height, DrawingController controller) {
         this.width = width;
         this.height = height;
@@ -42,7 +52,9 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         initialize();
     }
 
-
+    /**
+     * Initializes the drawing panel with default settings and event listeners.
+     */
     private void initialize() {
         this.borderColor = Color.BLACK;
         this.setPreferredSize(new Dimension(width, height));
@@ -51,18 +63,33 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         addMouseMotionListener(this);
     }
 
+    /**
+     * Gets the current color chosen mode.
+     *
+     * @return The current color chosen mode.
+     */
     public String getColorChosenMode() {
-        return colorChosenMode;
+        return colorChosenModel;
     }
 
-    public void setColorChosenMode(String colorChosenMode) {
-        this.colorChosenMode = colorChosenMode;
+    /**
+     * Sets the color chosen mode and updates the selected shape's initial state if applicable.
+     *
+     * @param colorChosenModel The new color chosen mode.
+     */
+    public void setColorChosenModel(String colorChosenModel) {
+        this.colorChosenModel = colorChosenModel;
         if (selectedShape != null) {
             System.out.println(this.selectedShape.getInnerId() + ",I am selected");
             this.initialSelectedShapeState = selectedShape.clone();
         }
     }
 
+    /**
+     * Overrides the paintComponent method to draw shapes on the panel.
+     *
+     * @param g The Graphics object used for painting.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -73,7 +100,11 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         }
     }
 
-
+    /**
+     * Handles mouse click events, selecting the topmost shape at the clicked point.
+     *
+     * @param e The MouseEvent object representing the click event.
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         //this.startPoint = e.getPoint();
@@ -86,6 +117,11 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         //this.lastMousePoint = e.getPoint();
     }
 
+    /**
+     * Handles mouse press events, initializing the starting point and selecting the topmost shape.
+     *
+     * @param e The MouseEvent object representing the press event.
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         this.startPoint = e.getPoint();
@@ -97,6 +133,11 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
     }
 
 
+    /**
+     * Handles mouse release events, updating the position of the selected shape or adding a new shape.
+     *
+     * @param e The MouseEvent object representing the release event.
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         Point endPoint = e.getPoint();
@@ -105,12 +146,8 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             int dx = e.getX() - lastMousePoint.x;
             int dy = e.getY() - lastMousePoint.y;
 
-
-            // If there was significant movement, treat it as a drag and don't perform other operations
             // Move the selected shape
-            if (dx != 0 && dy != 0) {
-                selectedShape.move(dx, dy);
-            }
+            selectedShape.move(dx, dy);
 
             // Update the last known mouse position
             lastMousePoint = e.getPoint();
@@ -128,6 +165,11 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         // Reset the selected shape
     }
 
+    /**
+     * Handles mouse drag events, moving the selected shape.
+     *
+     * @param e The MouseEvent object representing the drag event.
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
         if (selectedShape != null) {
@@ -159,12 +201,16 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
     }
 
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         shapeList = (List<Shape>) evt.getNewValue();
         paintComponent(getGraphics());
     }
 
+    /**
+     * Rotates the selected shape by the specified angle.
+     */
     public void rotateSelectedShape() {
         if (selectedShape != null) {
             // 获取用户输入的旋转角度
@@ -184,7 +230,12 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         }
     }
 
-
+    /**
+     * Gets the topmost selected shape at a given point.
+     *
+     * @param point The point at which to check for a selected shape.
+     * @return The topmost selected shape, or null if no shape is found.
+     */
     private Shape getTopmostSelectedShape(Point point) {
         List<Shape> reversedList = this.shapeList;
         Collections.reverse(reversedList);

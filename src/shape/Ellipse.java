@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
+/**
+ * The Ellipse class represents an ellipse shape in the vector drawing application.
+ */
 public class Ellipse extends Shape {
 
     private int width;
@@ -23,58 +26,78 @@ public class Ellipse extends Shape {
 
     private boolean lockRatio;
 
-    private Ellipse2D ellipse;
 
     public Ellipse() {
     }
 
-
+    /**
+     * Parameterized constructor for the Ellipse class.
+     *
+     * @param startPoint  The starting point of the ellipse.
+     * @param endPoint    The ending point of the ellipse.
+     * @param borderColor The border color of the ellipse.
+     * @param fillColor   The fill color of the ellipse.
+     * @param borderWidth The border width of the ellipse.
+     * @param lockRatio   A boolean indicating whether the aspect ratio is locked.
+     */
     public Ellipse(Point startPoint, Point endPoint, Color borderColor, Color fillColor, float borderWidth, boolean lockRatio) {
         super(startPoint, endPoint, borderColor, fillColor, borderWidth);
         this.lockRatio = lockRatio;
-        updateEllipse();
     }
 
     @Override
     public void move(int deltaX, int deltaY) {
         this.startPoint.setLocation(this.startPoint.getX() + deltaX, this.startPoint.getY() + deltaY);
         this.endPoint.setLocation(this.endPoint.getX() + deltaX, this.endPoint.getY() + deltaY);
-        updateEllipse();
     }
 
     @Override
     public void rotate(double rotationAngle) {
-        this.rotation += Math.toRadians(rotationAngle); // Convert degrees to radians
-        updateEllipse();
     }
 
 
     @Override
     public void drawShape(Graphics2D g) {
+        int minX = Math.min(startPoint.x, endPoint.x);
+        int maxX = Math.max(startPoint.x, endPoint.x);
+        int minY = Math.min(startPoint.y, endPoint.y);
+        int maxY = Math.max(startPoint.y, endPoint.y);
+        setWebProperties(minX, maxX, minY, maxY);
+
+        int width = maxX - minX;
+        int height = maxY - minY;
+
         g.setPaint(fillColorModel);
 
         if (this.lockRatio) {
             int diameter = Math.min(width, height);
-            ellipse.setFrame(startPoint.getX(), startPoint.getY(), diameter, diameter);
+            g.fillOval(minX, minY, diameter, diameter);
         } else {
-            ellipse.setFrameFromDiagonal(startPoint, endPoint);
+            g.fillOval(minX, minY, width, height);
         }
-
-        AffineTransform oldTransform = g.getTransform(); // Save the current transform
-        g.rotate(rotation, ellipse.getCenterX(), ellipse.getCenterY()); // Apply rotation
-        g.fill(ellipse);
 
         g.setColor(borderColorModel);
         g.setStroke(new BasicStroke(borderWidth));
 
-        g.draw(ellipse);
-
-        g.setTransform(oldTransform); // Restore the original transform
+        if (this.lockRatio) {
+            int diameter = Math.min(width, height);
+            g.drawOval(minX, minY, diameter, diameter);
+        } else {
+            g.drawOval(minX, minY, width, height);
+        }
     }
 
     @Override
     public boolean contains(Point point) {
-        return ellipse.contains(point);
+        double centerX = (startPoint.getX() + endPoint.getX()) / 2.0;
+        double centerY = (startPoint.getY() + endPoint.getY()) / 2.0;
+
+        double a = Math.abs(endPoint.getX() - startPoint.getX()) / 2.0;
+        double b = Math.abs(endPoint.getY() - startPoint.getY()) / 2.0;
+
+        Ellipse2D.Double ellipse = new Ellipse2D.Double(centerX - a, centerY - b, 2 * a, 2 * b);
+
+        return ellipse.contains(point.getX(), point.getY());
     }
 
     private void setWebProperties(int minX, int maxX, int minY, int maxY) {
@@ -105,22 +128,6 @@ public class Ellipse extends Shape {
             builder.add("fillColor", fillColor);
         }
         return builder.build();
-    }
-
-    private void updateEllipse() {
-        double minX = Math.min(startPoint.getX(), endPoint.getX());
-        double minY = Math.min(startPoint.getY(), endPoint.getY());
-        double maxX = Math.max(startPoint.getX(), endPoint.getX());
-        double maxY = Math.max(startPoint.getY(), endPoint.getY());
-
-        if (this.lockRatio) {
-            double diameter = Math.min(maxX - minX, maxY - minY);
-            ellipse = new Ellipse2D.Double(minX, minY, diameter, diameter);
-        } else {
-            ellipse = new Ellipse2D.Double(minX, minY, maxX - minX, maxY - minY);
-        }
-
-        setWebProperties((int) minX, (int) maxX, (int) minY, (int) maxY);
     }
 
     @Override
@@ -184,10 +191,5 @@ public class Ellipse extends Shape {
     public void setRotation(int rotation) {
         this.rotation = rotation;
     }
-
-
-
-
-
 
 }

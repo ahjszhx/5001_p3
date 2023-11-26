@@ -6,8 +6,11 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
 
+/**
+ * The Line class represents a line shape in the drawing application.
+ * It extends the base Shape class and implements methods specific to drawing and manipulating lines.
+ */
 public class Line extends Shape {
-
 
     private int x2;
 
@@ -20,19 +23,38 @@ public class Line extends Shape {
     public Line() {
     }
 
+    /**
+     * Parameterized constructor for creating a Line object with specified attributes.
+     *
+     * @param startPoint    The starting point of the line.
+     * @param endPoint      The ending point of the line.
+     * @param borderColor   The color of the line.
+     * @param fillColor     The fill color of the line (not applicable for lines).
+     * @param borderWidth   The width of the line.
+     */
     public Line(Point startPoint, Point endPoint, Color borderColor, Color fillColor, float borderWidth) {
         super(startPoint, endPoint, borderColor, fillColor, borderWidth);
     }
 
+    /**
+     * Moves the line by a specified delta in the x and y directions.
+     *
+     * @param deltaX The change in x direction.
+     * @param deltaY The change in y direction.
+     */
     @Override
     public void move(int deltaX, int deltaY) {
         this.startPoint.setLocation(this.startPoint.getX() + deltaX, this.startPoint.getY() + deltaY);
         this.endPoint.setLocation(this.endPoint.getX() + deltaX, this.endPoint.getY() + deltaY);
     }
 
+    /**
+     * Rotates the line by a specified angle.
+     *
+     * @param angle The rotation angle.
+     */
     @Override
     public void rotate(double angle) {
-        // 计算旋转后的新坐标
         // Find the midpoint of the line
         double midX = (startPoint.getX() + endPoint.getX()) / 2;
         double midY = (startPoint.getY() + endPoint.getY()) / 2;
@@ -62,6 +84,11 @@ public class Line extends Shape {
     }
 
 
+    /**
+     * Draws the line shape on the graphics context.
+     *
+     * @param g The graphics context to draw on.
+     */
     @Override
     public void drawShape(Graphics2D g) {
         super.drawShape(g);
@@ -70,42 +97,40 @@ public class Line extends Shape {
         g.drawLine((int) super.startPoint.getX(), (int) super.startPoint.getY(), (int) super.endPoint.getX(), (int) super.endPoint.getY());
     }
 
+    /**
+     * Checks if a point is on the line within a specified tolerance.
+     *
+     * @param point     The point to check.
+     * @return True if the point is on the line, false otherwise.
+     */
     @Override
     public boolean contains(Point point) {
         // Check if the point is on the line (within a tolerance)
         return isPointOnLine(point, this.startPoint, this.endPoint, 5);
     }
 
-    private void setWebProperties() {
-        this.x2 = endPoint.x;
-        this.y2 = endPoint.y;
-        this.lineColor = GlobalReference.COLOR_STR.get(super.borderColorModel);
-        this.lineWidth = (int) borderWidth;
-    }
-
-    @Override
-    public JsonObject toJson() {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        if (x2 != 0) {
-            builder.add("x2", x2);
-        }
-        if (y2 != 0) {
-            builder.add("y2", y2);
-        }
-        if (lineColor != null) {
-            builder.add("lineColor", lineColor);
-        }
-        if (lineWidth != 0) {
-            builder.add("lineWidth", lineWidth);
-        }
-        return builder.build();
-    }
-
+    /**
+     * Checks if a point is on the line within a specified tolerance.
+     *
+     * @param point     The point to check.
+     * @param lineStart The starting point of the line.
+     * @param lineEnd   The ending point of the line.
+     * @param tolerance The tolerance for the check.
+     * @return True if the point is on the line, false otherwise.
+     */
     public boolean isPointOnLine(Point point, Point lineStart, Point lineEnd, int tolerance) {
         double distance = pointToLineDistance(point, lineStart, lineEnd);
         return distance <= tolerance;
     }
 
+    /**
+     * Calculates the distance from a point to a line defined by two endpoints.
+     *
+     * @param point     The point.
+     * @param lineStart The starting point of the line.
+     * @param lineEnd   The ending point of the line.
+     * @return The distance from the point to the line.
+     */
     private double pointToLineDistance(Point point, Point lineStart, Point lineEnd) {
         double lineLength = lineStart.distance(lineEnd);
         if (lineLength == 0) {
@@ -128,6 +153,38 @@ public class Line extends Shape {
             double intersectionY = lineStart.y + u * (lineEnd.y - lineStart.y);
             return point.distance(intersectionX, intersectionY);
         }
+    }
+    /**
+     * Sets web-specific properties for serialization.
+     */
+    private void setWebProperties() {
+        this.x2 = endPoint.x;
+        this.y2 = endPoint.y;
+        this.lineColor = GlobalReference.COLOR_STR.get(super.borderColorModel);
+        this.lineWidth = (int) borderWidth;
+    }
+
+    /**
+     * Converts the Line object to a JSON representation.
+     *
+     * @return The JSON representation of the Line.
+     */
+    @Override
+    public JsonObject toJson() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        if (x2 != 0) {
+            builder.add("x2", x2);
+        }
+        if (y2 != 0) {
+            builder.add("y2", y2);
+        }
+        if (lineColor != null) {
+            builder.add("lineColor", lineColor);
+        }
+        if (lineWidth != 0) {
+            builder.add("lineWidth", lineWidth);
+        }
+        return builder.build();
     }
 
     @Override

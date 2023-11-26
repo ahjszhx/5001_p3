@@ -20,7 +20,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
-
+/**
+ * The DrawingView class represents the graphical user interface for the vector drawing application.
+ */
 public class DrawingView implements PropertyChangeListener {
 
     private JFrame mainFrame;
@@ -35,7 +37,12 @@ public class DrawingView implements PropertyChangeListener {
 
     private JButton redoButton;
 
-
+    /**
+     * Constructs a DrawingView with the specified DrawingModel and DrawingController.
+     *
+     * @param model      The DrawingModel for the application.
+     * @param controller The DrawingController for managing user interactions.
+     */
     public DrawingView(DrawingModel model, DrawingController controller) {
         this.model = model;
         this.drawingController = controller;
@@ -46,6 +53,9 @@ public class DrawingView implements PropertyChangeListener {
         ServerConnect.initializeSocket();
     }
 
+    /**
+     * Initializes the graphical user interface components.
+     */
     private void initializeView() {
 
         mainFrame = new JFrame("Vector Drawing App");
@@ -78,9 +88,7 @@ public class DrawingView implements PropertyChangeListener {
                     JOptionPane.showMessageDialog(mainFrame, "Submit failed");
                 }
                 drawingAreaPanel.setSelectedShape(null);
-
             }
-            //drawingController.setAddResult(ServerConnect.getAddResponse());
         });
         topPanel.add(submit);
 
@@ -138,7 +146,7 @@ public class DrawingView implements PropertyChangeListener {
 
         undoButton = createButton("Undo");
         undoButton.addActionListener(e -> {
-            drawingController.controlUndo();
+            drawingController.undo();
             mainFrame.repaint();
         });
         undoButton.setEnabled(false);
@@ -146,7 +154,7 @@ public class DrawingView implements PropertyChangeListener {
 
         redoButton = createButton("Redo");
         redoButton.addActionListener(e -> {
-            drawingController.controlRedo();
+            drawingController.redo();
             mainFrame.repaint();
         });
         redoButton.setEnabled(false);
@@ -182,6 +190,7 @@ public class DrawingView implements PropertyChangeListener {
             if (statusCode == JFileChooser.APPROVE_OPTION) {
                 try {
                     drawingController.saveAsFile(jfc.getSelectedFile().getPath());
+                    JOptionPane.showMessageDialog(mainFrame, "save success!");
                 } catch (IOException ioException){
                     JOptionPane.showMessageDialog(mainFrame, "save failed!");
                     ioException.printStackTrace();
@@ -212,7 +221,7 @@ public class DrawingView implements PropertyChangeListener {
         topPanel.add(openButton);
         JButton clearButton = createButton("Clear");
         clearButton.addActionListener(e -> {
-            drawingController.controlClear();
+            drawingController.clear();
             mainFrame.repaint();
         });
         topPanel.add(clearButton);
@@ -225,14 +234,14 @@ public class DrawingView implements PropertyChangeListener {
 
         JButton borderColorSelectorButton = new JButton("Border Color");
         borderColorSelectorButton.addActionListener(e -> {
-            drawingAreaPanel.setColorChosenMode("borderColor");
+            drawingAreaPanel.setColorChosenModel("borderColor");
             colorSelectorDialog.setVisible(true);
         });
         leftPanel.add(borderColorSelectorButton);
 
         JButton fillColorSelectorButton = new JButton("Fill Color");
         fillColorSelectorButton.addActionListener(e -> {
-            drawingAreaPanel.setColorChosenMode("fillColor");
+            drawingAreaPanel.setColorChosenModel("fillColor");
             colorSelectorDialog.setVisible(true);
         });
         leftPanel.add(fillColorSelectorButton);
@@ -306,6 +315,11 @@ public class DrawingView implements PropertyChangeListener {
         mainFrame.setVisible(true);
     }
 
+    /**
+     * Handles property change events, enabling or disabling undo and redo buttons based on the model state.
+     *
+     * @param evt The PropertyChangeEvent object representing the property change event.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         redoButton.setEnabled(!model.isRedoStackEmpty());

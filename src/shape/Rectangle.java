@@ -8,8 +8,11 @@ import javax.json.JsonObjectBuilder;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
+/**
+ * The Rectangle class represents a rectangle or square shape in the drawing application.
+ * It extends the base Shape class and provides methods specific to drawing and manipulating rectangles.
+ */
 public class Rectangle extends Shape {
-
 
     private int width;
 
@@ -26,23 +29,48 @@ public class Rectangle extends Shape {
     public Rectangle() {
     }
 
-
+    /**
+     * Parameterized constructor for creating a Rectangle object with specified attributes.
+     *
+     * @param startPoint   The starting point of the rectangle.
+     * @param endPoint     The ending point of the rectangle.
+     * @param borderColor  The color of the rectangle.
+     * @param fillColor    The fill color of the rectangle.
+     * @param borderWidth  The width of the rectangle's border.
+     * @param lockRatio    Indicates whether the aspect ratio should be locked during resizing.
+     */
     public Rectangle(Point startPoint, Point endPoint, Color borderColor, Color fillColor, float borderWidth, boolean lockRatio) {
         super(startPoint, endPoint, borderColor, fillColor, borderWidth);
         this.lockRatio = lockRatio;
     }
 
+    /**
+     * Moves the rectangle by a specified delta in the x and y directions.
+     *
+     * @param deltaX The change in x direction.
+     * @param deltaY The change in y direction.
+     */
     @Override
     public void move(int deltaX, int deltaY) {
         this.startPoint.setLocation(this.startPoint.getX() + deltaX, this.startPoint.getY() + deltaY);
         this.endPoint.setLocation(this.endPoint.getX() + deltaX, this.endPoint.getY() + deltaY);
     }
 
+    /**
+     * Rotates the rectangle by a specified rotation angle.
+     *
+     * @param rotationAngle The rotation angle in degrees.
+     */
     @Override
     public void rotate(double rotationAngle) {
         this.rotation += rotationAngle;
     }
 
+    /**
+     * Draws the rectangle shape on the graphics context.
+     *
+     * @param g The graphics context to draw on.
+     */
     @Override
     public void drawShape(Graphics2D g) {
 
@@ -92,12 +120,21 @@ public class Rectangle extends Shape {
         }
     }
 
+    /**
+     * Checks if a point is inside the rectangle.
+     *
+     * @param point The point to check.
+     * @return True if the point is inside the rectangle, false otherwise.
+     */
     @Override
     public boolean contains(Point point) {
         return point.x >= startPoint.x && point.x <= endPoint.x &&
                 point.y >= startPoint.y && point.y <= endPoint.y;
     }
 
+    /**
+     * Sets web-specific properties for serialization.
+     */
     private void setWebProperties(int minX, int maxX, int minY, int maxY) {
         this.width = maxX - minX;
         this.height = maxY - minY;
@@ -105,7 +142,11 @@ public class Rectangle extends Shape {
         this.fillColor = GlobalReference.COLOR_STR.get(super.fillColorModel);
     }
 
-
+    /**
+     * Converts the Rectangle object to a JSON representation.
+     *
+     * @return The JSON representation of the Rectangle.
+     */
     public JsonObject toJson() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         if (width != 0) {

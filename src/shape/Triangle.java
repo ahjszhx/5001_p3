@@ -7,7 +7,10 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
 
-
+/**
+ * The Triangle class represents a triangle shape in the drawing application.
+ * It extends the base Shape class and provides methods specific to drawing and manipulating triangles.
+ */
 public class Triangle extends Shape {
 
     private int x2;
@@ -28,10 +31,25 @@ public class Triangle extends Shape {
         super();
     }
 
+    /**
+     * Parameterized constructor for creating a Triangle object with specified attributes.
+     *
+     * @param startPoint   The starting point of the triangle.
+     * @param endPoint     The ending point of the triangle.
+     * @param borderColor  The color of the triangle border.
+     * @param fillColor    The fill color of the triangle.
+     * @param borderWidth  The width of the triangle's border.
+     */
     public Triangle(Point startPoint, Point endPoint, Color borderColor, Color fillColor, float borderWidth) {
         super(startPoint, endPoint, borderColor, fillColor, borderWidth);
     }
 
+    /**
+     * Moves the triangle by a specified delta in the x and y directions.
+     *
+     * @param deltaX The change in x direction.
+     * @param deltaY The change in y direction.
+     */
     @Override
     public void move(int deltaX, int deltaY) {
         this.startPoint.setLocation(this.startPoint.getX() + deltaX, this.startPoint.getY() + deltaY);
@@ -43,7 +61,11 @@ public class Triangle extends Shape {
 
     }
 
-
+    /**
+     * Draws the triangle shape on the graphics context.
+     *
+     * @param g The graphics context to draw on.
+     */
     @Override
     public void drawShape(Graphics2D g) {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -91,6 +113,12 @@ public class Triangle extends Shape {
         g2d.dispose();
     }
 
+    /**
+     * Checks if a point is inside the triangle.
+     *
+     * @param point The point to check.
+     * @return True if the point is inside the triangle, false otherwise.
+     */
     @Override
     public boolean contains(Point point) {
         Polygon triangle = new Polygon();
@@ -107,6 +135,9 @@ public class Triangle extends Shape {
         return triangle.contains(point.getX(), point.getY());
     }
 
+    /**
+     * Sets web-specific properties for serialization.
+     */
     private void setWebProperties(int x3, int y3) {
         this.x2 = endPoint.x;
         this.y2 = endPoint.y;
@@ -117,6 +148,11 @@ public class Triangle extends Shape {
     }
 
 
+    /**
+     * Converts the Triangle object to a JSON representation.
+     *
+     * @return The JSON representation of the Triangle.
+     */
     @Override
     public JsonObject toJson() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
