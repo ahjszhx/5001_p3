@@ -9,12 +9,13 @@
 5、Undo/redo
 6、Different border/line color, border/line width, or fill colors (if applicable) for each shape
 8、Support for drawing squares and circles. I added square and circle buttons that lock the aspect ratio of the ellipse and rectangle when drawn
-Operation Demonstration:
-![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/basicOperations.gif?token=GHSAT0AAAAAACKYX3EC5HTOYBH5Y5LVKRQKZLCGPRQ)
-
+Operation Demonstration of features above:
+![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/basicOperations.gif)
 7、Rotation of the shapes
-9、Select a previously drawn object and change its location, color or size
 
+9、Select a previously drawn object and change its location, color or size
+![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/SaveAndLoad.gif)
+![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/ModifyPropertie.gif)
 10、Use networking to sharing drawings with other users using the protocol specified below
 
 ## How to run it
