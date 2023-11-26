@@ -1,6 +1,6 @@
 package controller;
 import model.DrawingModel;
-import model.SaveAsFile;
+import model.SaveToFile;
 import shape.Shape;
 
 import javax.imageio.ImageIO;
@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,17 +36,10 @@ public class DrawingController{
         model.setShapeServerId(serverId,innerId);
     }
 
-//    public void updateShapeToServer(String serverId) {
-//        model.updateShapeToServer(serverId);
-//    }
-
     public void removeShapeFromServer(String serverId) {
         model.removeShapeFromServer(serverId);
     }
 
-//    public void setAddResult(String shape){
-//        System.out.println(shape);
-//    }
 
     public void controlUndo() {
         model.undo();
@@ -75,37 +69,30 @@ public class DrawingController{
         return true;
     }
 
-    public boolean saveAsFile(String path) {
-        try {
-            if (!path.endsWith(".drawing")) {
-                path = path + ".drawing";
-            }
-            FileOutputStream fileOut = new FileOutputStream(path);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(model.save());
-            out.close();
-            fileOut.close();
-            return true;
-        } catch (IOException ioe) {
-            return false;
+    public void saveAsFile(String path) throws IOException{
+        if (!path.endsWith(".drawing")) {
+            path = path + ".drawing";
         }
+        FileOutputStream fileOut = new FileOutputStream(path);
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        out.writeObject(model.save());
+        out.close();
+        fileOut.close();
+    }
+
+
+    public void openFromFile(String path) throws IOException, ClassNotFoundException {
+
+        FileInputStream fileIn = new FileInputStream(path);
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        SaveToFile fileRead = (SaveToFile) in.readObject();
+        in.close();
+        fileIn.close();
+        model.loadFromFile(fileRead);
+
     }
 
     public void loadFromServer(List<Shape> list){
         model.loadFromServer(list);
-    }
-
-    public boolean openFromFile(String path) {
-        try {
-            FileInputStream fileIn = new FileInputStream(path);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            SaveAsFile fileRead = (SaveAsFile) in.readObject();
-            in.close();
-            fileIn.close();
-            model.loadFromFile(fileRead);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 }

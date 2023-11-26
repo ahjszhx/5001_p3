@@ -3,7 +3,7 @@ package test;
 import static org.junit.Assert.*;
 
 import model.DrawingModel;
-import model.SaveAsFile;
+import model.SaveToFile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -98,7 +98,7 @@ public class DrawingModelTest {
     public void testSaveAndReload() {
         drawingModel.addShape(originShape1);
         drawingModel.addShape(originShape2);
-        SaveAsFile saved = drawingModel.save();
+        SaveToFile saved = drawingModel.save();
         drawingModel.loadFromFile(saved);
         Assert.assertEquals(drawingModel.getShapeList(), saved.getShapeList());
     }

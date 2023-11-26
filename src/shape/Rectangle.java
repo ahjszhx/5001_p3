@@ -6,8 +6,10 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class Rectangle extends Shape {
+
 
     private int width;
 
@@ -38,11 +40,12 @@ public class Rectangle extends Shape {
 
     @Override
     public void rotate(double rotationAngle) {
-
+        this.rotation += rotationAngle;
     }
 
     @Override
     public void drawShape(Graphics2D g) {
+
         int minX = Math.min(startPoint.x, endPoint.x);
         int maxX = Math.max(startPoint.x, endPoint.x);
         int minY = Math.min(startPoint.y, endPoint.y);
@@ -51,16 +54,22 @@ public class Rectangle extends Shape {
         setWebProperties(minX, maxX, minY, maxY);
 
         g.setPaint(fillColorModel);
-
         if (lockRatio) {
-            // 如果 lockRatio 为 true，画正方形
+            // If lockRatio is true, draw a rotated square
             int width = maxX - minX;
             int height = maxY - minY;
             int sideLength = Math.min(width, height);
+
+            AffineTransform oldTransform = g.getTransform();
+            g.rotate(Math.toRadians(rotation), minX + sideLength / 2, minY + sideLength / 2);
             g.fillRect(minX, minY, sideLength, sideLength);
+            g.setTransform(oldTransform);
         } else {
-            // 如果 lockRatio 为 false，画长方形
+            // If lockRatio is false, draw a rotated rectangle
+            AffineTransform oldTransform = g.getTransform();
+            g.rotate(Math.toRadians(rotation), (minX + maxX) / 2.0, (minY + maxY) / 2.0);
             g.fillRect(minX, minY, maxX - minX, maxY - minY);
+            g.setTransform(oldTransform);
         }
 
         g.setColor(borderColorModel);
@@ -70,9 +79,16 @@ public class Rectangle extends Shape {
             int width = maxX - minX;
             int height = maxY - minY;
             int sideLength = Math.min(width, height);
+
+            AffineTransform oldTransform = g.getTransform();
+            g.rotate(Math.toRadians(rotation), minX + sideLength / 2, minY + sideLength / 2);
             g.drawRect(minX, minY, sideLength, sideLength);
+            g.setTransform(oldTransform);
         } else {
+            AffineTransform oldTransform = g.getTransform();
+            g.rotate(Math.toRadians(rotation), (minX + maxX) / 2.0, (minY + maxY) / 2.0);
             g.drawRect(minX, minY, maxX - minX, maxY - minY);
+            g.setTransform(oldTransform);
         }
     }
 

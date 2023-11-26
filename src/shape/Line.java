@@ -1,13 +1,13 @@
 package shape;
 
 import global.GlobalReference;
-
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
 
 public class Line extends Shape {
+
 
     private int x2;
 
@@ -63,17 +63,17 @@ public class Line extends Shape {
 
 
     @Override
-    public boolean contains(Point point) {
-        // Check if the point is on the line (within a tolerance)
-        return isPointOnLine(point, this.startPoint, this.endPoint, 5);
-    }
-
-    @Override
     public void drawShape(Graphics2D g) {
         super.drawShape(g);
         this.setWebProperties();
         g.setPaint(borderColorModel);
         g.drawLine((int) super.startPoint.getX(), (int) super.startPoint.getY(), (int) super.endPoint.getX(), (int) super.endPoint.getY());
+    }
+
+    @Override
+    public boolean contains(Point point) {
+        // Check if the point is on the line (within a tolerance)
+        return isPointOnLine(point, this.startPoint, this.endPoint, 5);
     }
 
     private void setWebProperties() {
@@ -176,13 +176,6 @@ public class Line extends Shape {
         this.lineWidth = lineWidth;
     }
 
-    public String getLineColor() {
-        return lineColor;
-    }
-
-    public int getLineWidth() {
-        return lineWidth;
-    }
 
 
 }

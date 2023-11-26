@@ -16,7 +16,6 @@ import java.util.List;
 
 public class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener, PropertyChangeListener {
 
-
     private final int width;
     private final int height;
     private String drawMode;
@@ -129,8 +128,6 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void mouseDragged(MouseEvent e) {
         if (selectedShape != null) {
-            //prevShape =
-            // Calculate mouse movement
             int dx = e.getX() - lastMousePoint.x;
             int dy = e.getY() - lastMousePoint.y;
 
@@ -140,8 +137,6 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             // Update the last known mouse position
             lastMousePoint = e.getPoint();
 
-            // Repaint the panel
-            //repaint();
         }
     }
 
@@ -170,7 +165,6 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
     public void rotateSelectedShape() {
         if (selectedShape != null) {
             // 获取用户输入的旋转角度
-            // 这里可以使用 JOptionPane.showInputDialog 或者其他方式获取输入
             //String input = JOptionPane.showInputDialog(this, "Enter Rotation Angle:");
             if (rotationAngle != 0) {
                 try {
@@ -200,17 +194,6 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         return null;
     }
 
-    public void setRotationAngle(double rotationAngle) {
-        this.rotationAngle = rotationAngle;
-    }
-
-    public void setDrawMode(String drawMode) {
-        this.drawMode = drawMode;
-    }
-
-    public Color getBorderColor() {
-        return borderColor;
-    }
 
     public void setBorderColor(Color color) {
         this.borderColor = color;
@@ -261,5 +244,17 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
     public void setSelectedShape(Shape selectedShape) {
         this.selectedShape = selectedShape;
+    }
+
+    public void setRotationAngle(double rotationAngle) {
+        this.rotationAngle = rotationAngle;
+    }
+
+    public void setDrawMode(String drawMode) {
+        this.drawMode = drawMode;
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
     }
 }

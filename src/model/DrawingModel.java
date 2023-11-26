@@ -22,7 +22,6 @@ public class DrawingModel {
         this.shapeList = new ArrayList<>();
     }
 
-
     public void addListener(PropertyChangeListener listener) {
         notifier.addPropertyChangeListener(listener);
     }
@@ -50,7 +49,6 @@ public class DrawingModel {
                 shapeList.set(shapeList.indexOf(shape), updatedShape);
             }
         }
-        //notifier.firePropertyChange("updatedShape", prevShape, updatedShape);
         updateList();
     }
 
@@ -74,11 +72,11 @@ public class DrawingModel {
         updateList();
     }
 
-    public SaveAsFile save() {
-        return new SaveAsFile(shapeList);
+    public SaveToFile save() {
+        return new SaveToFile(shapeList);
     }
 
-    public void loadFromFile(SaveAsFile fileRead) {
+    public void loadFromFile(SaveToFile fileRead) {
         this.shapeList = fileRead.shapeList;
         updateList();
     }

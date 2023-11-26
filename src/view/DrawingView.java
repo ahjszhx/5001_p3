@@ -14,6 +14,7 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -176,15 +177,17 @@ public class DrawingView implements PropertyChangeListener {
             // extension name limitation
             jfc.setFileFilter(new FileNameExtensionFilter("Save to file (.drawing)", "drawing"));
             jfc.setSelectedFile(new File(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss")) + ".drawing"));
-            int statusCode = jfc.showDialog(mainFrame, "save");
+            int statusCode = jfc.showDialog(mainFrame, "save to file");
             if (statusCode == JFileChooser.APPROVE_OPTION) {
-                if (drawingController.saveAsFile(jfc.getSelectedFile().getPath())) {
-                    JOptionPane.showMessageDialog(mainFrame, "save successfully!");
-                } else {
+                try {
+                    drawingController.saveAsFile(jfc.getSelectedFile().getPath());
+                } catch (IOException ioException){
                     JOptionPane.showMessageDialog(mainFrame, "save failed!");
+                    ioException.printStackTrace();
                 }
+
             } else if (statusCode == JFileChooser.ERROR_OPTION) {
-                JOptionPane.showMessageDialog(mainFrame, "unknown error!");
+                JOptionPane.showMessageDialog(mainFrame, "save failed!");
             }
         });
         topPanel.add(saveAsFileButton);
@@ -193,15 +196,16 @@ public class DrawingView implements PropertyChangeListener {
             JFileChooser jfc = new JFileChooser();
             jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             jfc.setFileFilter(new FileNameExtensionFilter("Open drawing file (.drawing)", "drawing"));
-            int statusCode = jfc.showDialog(mainFrame, "open");
+            int statusCode = jfc.showDialog(mainFrame, "open drawing file");
             if (statusCode == JFileChooser.APPROVE_OPTION) {
-                if (drawingController.openFromFile(jfc.getSelectedFile().getPath())) {
-                    JOptionPane.showMessageDialog(mainFrame, "open successfully!");
-                } else {
-                    JOptionPane.showMessageDialog(mainFrame, "open failed!");
+                try {
+                    drawingController.openFromFile(jfc.getSelectedFile().getPath());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(mainFrame, "Open failed!");
+                    ex.printStackTrace();
                 }
             } else if (statusCode == JFileChooser.ERROR_OPTION) {
-                JOptionPane.showMessageDialog(mainFrame, "unknown error!");
+                JOptionPane.showMessageDialog(mainFrame, "Open failed!");
             }
         });
         topPanel.add(openButton);
@@ -277,13 +281,14 @@ public class DrawingView implements PropertyChangeListener {
                     rotationTextField.setText("Input Rotation Angle");
                     rotationTextField.setForeground(Color.GRAY);
                 }
-                drawingAreaPanel.setRotationAngle(Double.parseDouble(rotationTextField.getText()));
+                //drawingAreaPanel.setRotationAngle(Double.parseDouble(rotationTextField.getText()));
             }
         });
         JButton rotationButton = createLeftButton("Rotate Shape");
         rotationButton.addActionListener(e -> {
             //drawingController.controlClear();
-            drawingAreaPanel.setRotationAngle(0);
+            drawingAreaPanel.rotateSelectedShape();
+            //drawingAreaPanel.setRotationAngle(0);
             mainFrame.repaint();
         });
         leftPanel.add(rotationButton);

@@ -7,13 +7,14 @@ import java.util.List;
 
 
 
-public class SaveAsFile implements Serializable {
+public class SaveToFile implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     List<Shape> shapeList;
 
 
-    public SaveAsFile(List<Shape> shapeList) {
+    public SaveToFile(List<Shape> shapeList) {
         this.shapeList = shapeList;
     }
 

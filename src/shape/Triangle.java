@@ -7,6 +7,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
 
+
 public class Triangle extends Shape {
 
     private int x2;
@@ -42,15 +43,13 @@ public class Triangle extends Shape {
 
     }
 
+
     @Override
     public void drawShape(Graphics2D g) {
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // 计算等边三角形的高度
-        //int height = (int) (Math.sqrt(3) * (endPoint.x - startPoint.x) / 2);
         int height = (int) (Math.sqrt(3) / 2 * (endPoint.x - startPoint.x));
 
-        // 计算三个顶点的坐标
         int x1 = (int) startPoint.getX();
         int y1 = (int) endPoint.getY();
         int x2 = (int) endPoint.getX();
@@ -91,7 +90,6 @@ public class Triangle extends Shape {
         // 释放资源
         g2d.dispose();
     }
-
 
     @Override
     public boolean contains(Point point) {
@@ -219,8 +217,4 @@ public class Triangle extends Shape {
         this.fillColor = fillColor;
     }
 
-
-    public int getRotation() {
-        return rotation;
-    }
 }

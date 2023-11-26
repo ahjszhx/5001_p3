@@ -19,8 +19,10 @@ Drag and drop to move the graphic, mouse click to select the graphic, you can mo
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/changeLocationColor.gif)
 10、Use networking to sharing drawings with other users using the protocol specified below
 Click to update or delete a selected shapes
-## How to run it
+![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/networking.gif)
 
+
+## How to run it
 1 cd into the src directory
 
 cd ./src
@@ -36,10 +38,6 @@ java DrawingApp
 
 
 ## JUnit
-
-For the `JUnit`, I passed all the test I designed before. showed in image.
-
-![images](https://github.com/ZhongliangGuo/CS5001/blob/main/CS5001-p4-vector-drawing/readme%20sources/tests.png)
 
 ### `testAddShape()` Test to see if adding the shape was successful
 Test Result: Passed
