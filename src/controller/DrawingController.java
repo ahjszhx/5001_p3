@@ -27,14 +27,25 @@ public class DrawingController{
         model.addShape(shape);
     }
 
-
     public void updateShape(Shape updatedShape,Shape prevShape) {
         model.updateShape(updatedShape,prevShape);
     }
 
-    public void setAddResult(String shape){
-        System.out.println(shape);
+    public void setShapeServerId(String serverId,String innerId) {
+        model.setShapeServerId(serverId,innerId);
     }
+
+//    public void updateShapeToServer(String serverId) {
+//        model.updateShapeToServer(serverId);
+//    }
+
+    public void removeShapeFromServer(String serverId) {
+        model.removeShapeFromServer(serverId);
+    }
+
+//    public void setAddResult(String shape){
+//        System.out.println(shape);
+//    }
 
     public void controlUndo() {
         model.undo();

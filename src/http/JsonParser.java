@@ -1,11 +1,4 @@
 package http;
-
-import shape.Ellipse;
-import shape.Line;
-import shape.Rectangle;
-import shape.Shape;
-import shape.Triangle;
-
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -197,5 +190,25 @@ public class JsonParser {
         }
         return resultData;
     }
+
+    public static Receipt parseReceipt(String jsonString) {
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+
+        // 解析 JSON 字符串
+        JsonObject jsonObject = jsonReader.readObject();
+
+        // 获取结果和消息
+        String result = jsonObject.getString("result");
+        Receipt receipt = new Receipt(result);
+        if (!result.equals("ok")) {
+            String message = jsonObject.getString("message");
+            receipt.setMessage(message);
+        }
+        // 打印结果和消息
+        System.out.println("Result: " + result);
+        //System.out.println("Message: " + message);
+        return new Receipt(result);
+    }
+
 
 }

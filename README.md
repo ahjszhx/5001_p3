@@ -15,9 +15,10 @@ Operation Demonstration of features above:
 
 9、Select a previously drawn object and change its location, color or size
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/SaveAndLoad.gif)
-![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/ModifyPropertie.gif)
+Drag and drop to move the graphic, mouse click to select the graphic, you can modify the graphic colour and border attributes
+![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/changeLocationColor.gif)
 10、Use networking to sharing drawings with other users using the protocol specified below
-
+Click to update or delete a selected shapes
 ## How to run it
 
 1 cd into the src directory

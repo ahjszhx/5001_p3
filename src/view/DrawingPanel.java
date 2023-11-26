@@ -3,11 +3,8 @@ package view;
 import controller.DrawingController;
 import shape.Shape;
 import shape.ShapeFactory;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -26,7 +23,7 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
     private Color borderColor;
     private float borderWidth;
     private Color fillColor;
-    private ArrayList<Shape> shapeList = new ArrayList<>();
+    private List<Shape> shapeList = new ArrayList<>();
     private final DrawingController controller;
     private Point startPoint;
     private Shape selectedShape;
@@ -166,7 +163,7 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        shapeList = (ArrayList<Shape>) evt.getNewValue();
+        shapeList = (List<Shape>) evt.getNewValue();
         paintComponent(getGraphics());
     }
 
@@ -256,5 +253,13 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             selectedShape = null;
             repaint();
         }
+    }
+
+    public Shape getSelectedShape() {
+        return selectedShape;
+    }
+
+    public void setSelectedShape(Shape selectedShape) {
+        this.selectedShape = selectedShape;
     }
 }

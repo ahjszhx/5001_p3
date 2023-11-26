@@ -15,7 +15,6 @@ public class DrawingModel {
     private final PropertyChangeSupport notifier;
     private List<Shape> shapeList;
 
-
     public DrawingModel() {
         this.notifier = new PropertyChangeSupport(this);
         this.undoStack = new Stack<>();
@@ -29,7 +28,7 @@ public class DrawingModel {
     }
 
 
-    private void update() {
+    private void updateList() {
         notifier.firePropertyChange("shapeList", null, shapeList);
     }
 
@@ -39,20 +38,40 @@ public class DrawingModel {
         redoStack.clear();
         undoStack.push(action);
         shapeList.add(shape);
-        update();
+        updateList();
     }
 
-
     public void updateShape(Shape updatedShape, Shape prevShape) {
-        DrawingAction action = new DrawingAction(DrawingAction.ActionType.UPDATE, updatedShape,prevShape);
+        DrawingAction action = new DrawingAction(DrawingAction.ActionType.UPDATE, updatedShape, prevShape);
         redoStack.clear();
         undoStack.push(action);
         for (Shape shape : shapeList) {
-            if(shape.getInnerId().equals(updatedShape.getInnerId())){
-                shapeList.set(shapeList.indexOf(shape),updatedShape);
+            if (shape.getInnerId().equals(updatedShape.getInnerId())) {
+                shapeList.set(shapeList.indexOf(shape), updatedShape);
             }
         }
-        update();
+        //notifier.firePropertyChange("updatedShape", prevShape, updatedShape);
+        updateList();
+    }
+
+    public void setShapeServerId(String serverId, String innerId) {
+        for (Shape shape : shapeList) {
+            if (shape.getInnerId().equals(innerId)) {
+                shape.setUuid(serverId);
+            }
+        }
+        updateList();
+    }
+
+    public void removeShapeFromServer(String serverId) {
+        int index = 0;
+        for (Shape shape : shapeList) {
+            if (shape.getUuid().equals(serverId)) {
+                index = shapeList.indexOf(shape);
+            }
+        }
+        shapeList.remove(shapeList.get(index));
+        updateList();
     }
 
     public SaveAsFile save() {
@@ -61,7 +80,7 @@ public class DrawingModel {
 
     public void loadFromFile(SaveAsFile fileRead) {
         this.shapeList = fileRead.shapeList;
-        update();
+        updateList();
     }
 
     public void loadFromServer(List<Shape> shapeList) {
@@ -70,7 +89,7 @@ public class DrawingModel {
                 this.shapeList.add(shape);
             }
         }
-        update();
+        updateList();
     }
 
     public void undo() {
@@ -79,7 +98,7 @@ public class DrawingModel {
             DrawingAction redoAction = action.clone();
             redoStack.push(redoAction);
             applyReverseAction(action);
-            update();
+            updateList();
             // Apply the reverse of the action
 
         }
@@ -92,7 +111,7 @@ public class DrawingModel {
 
             // Apply the action
             applyAction(action);
-            update();
+            updateList();
         }
     }
 
@@ -106,10 +125,9 @@ public class DrawingModel {
     }
 
 
-
     public void clear() {
         shapeList.clear();
-        update();
+        updateList();
     }
 
     public List<Shape> getShapeList() {

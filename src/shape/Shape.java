@@ -6,7 +6,6 @@ import javax.json.JsonObjectBuilder;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 public abstract class Shape implements Serializable {
@@ -132,4 +131,5 @@ public abstract class Shape implements Serializable {
     public int hashCode() {
         return Objects.hash(getInnerId(), getStartPoint(), getEndPoint(), getBorderColorModel(), getFillColorModel(), getBorderWidth());
     }
+
 }

@@ -4,12 +4,12 @@ import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import java.io.StringWriter;
 
-public class DrawingAction {
+public class ClientAction {
 
     private String action;
     private DrawingData data;
 
-    public DrawingAction(String action, DrawingData data) {
+    public ClientAction(String action, DrawingData data) {
         this.action = action;
         this.data = data;
     }
@@ -28,6 +28,7 @@ public class DrawingAction {
         return stringWriter.toString();
     }
 
-
-
+    public String getAction() {
+        return action;
+    }
 }

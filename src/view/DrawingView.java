@@ -2,35 +2,22 @@ package view;
 
 import controller.DrawingController;
 import global.GlobalReference;
-import http.DrawingAction;
+import http.ClientAction;
 import http.DrawingData;
-import http.DrawingInfo;
-import http.JsonParser;
-import http.ResultData;
 import http.ServerConnect;
 import model.DrawingModel;
-import shape.Shape;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
 
 
 public class DrawingView implements PropertyChangeListener {
@@ -76,16 +63,75 @@ public class DrawingView implements PropertyChangeListener {
 
         JButton submit = createButton("addDrawing");
         submit.addActionListener(e -> {
-            if (model.getShapeList().size() == 0) {
-                JOptionPane.showMessageDialog(mainFrame, "Please draw a graph before submitting.", "WARNING", JOptionPane.WARNING_MESSAGE);
+            if (drawingAreaPanel.getSelectedShape() == null) {
+                JOptionPane.showMessageDialog(mainFrame, "Please select a shape before submitting.", "WARNING", JOptionPane.WARNING_MESSAGE);
             } else {
-                DrawingData drawingData = new DrawingData(model.getShapeList().get(model.getShapeList().size() - 1));
-                ServerConnect.addDrawing(drawingData);
-                JOptionPane.showMessageDialog(mainFrame, "Submit successfully, the id is" + ServerConnect.getResultData().getData().getId());
+                DrawingData drawingData = new DrawingData(drawingAreaPanel.getSelectedShape());
+                ClientAction serverAction = new ClientAction("addDrawing",drawingData);
+                ServerConnect.addOrUpdateDrawing(serverAction);
+                if(ServerConnect.getResultData().getResult().equals("ok")){
+                    drawingController.setShapeServerId( ServerConnect.getResultData().getData().getId(),drawingAreaPanel.getSelectedShape().getInnerId());
+                    JOptionPane.showMessageDialog(mainFrame, "Submit successfully, the id is" + ServerConnect.getResultData().getData().getId());
+                }
+                else {
+                    JOptionPane.showMessageDialog(mainFrame, "Submit failed");
+                }
+                drawingAreaPanel.setSelectedShape(null);
+
             }
-            drawingController.setAddResult(ServerConnect.getAddResponse());
+            //drawingController.setAddResult(ServerConnect.getAddResponse());
         });
         topPanel.add(submit);
+
+        JButton updateDrawing = createButton("updateDrawing");
+        updateDrawing.addActionListener(e -> {
+            if (drawingAreaPanel.getSelectedShape() == null) {
+                JOptionPane.showMessageDialog(mainFrame, "Please select a shape before updating.", "WARNING", JOptionPane.WARNING_MESSAGE);
+            } else {
+                String serverId = drawingAreaPanel.getSelectedShape().getUuid();
+                if(serverId==null){
+                    JOptionPane.showMessageDialog(mainFrame, "This shape has not been submitted and cannot be updated.", "WARNING", JOptionPane.WARNING_MESSAGE);
+                }
+                else {
+                    DrawingData drawingData = new DrawingData(drawingAreaPanel.getSelectedShape());
+                    ClientAction serverAction = new ClientAction("updateDrawing",drawingData);
+                    ServerConnect.addOrUpdateDrawing(serverAction);
+                    if(ServerConnect.getResultData().getResult().equals("ok")){
+                        JOptionPane.showMessageDialog(mainFrame, "Update successfully");
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(mainFrame, "Update failed");
+                    }
+                    drawingAreaPanel.setSelectedShape(null);
+                }
+            }
+            //drawingController.setAddResult(ServerConnect.getAddResponse());
+        });
+        topPanel.add(updateDrawing);
+
+        JButton deleteDrawing = createButton("deleteDrawing");
+        deleteDrawing.addActionListener(e -> {
+            if (drawingAreaPanel.getSelectedShape() == null) {
+                JOptionPane.showMessageDialog(mainFrame, "Please select a shape before deleting.", "WARNING", JOptionPane.WARNING_MESSAGE);
+            } else {
+                String serverId = drawingAreaPanel.getSelectedShape().getUuid();
+                if(serverId==null){
+                    JOptionPane.showMessageDialog(mainFrame, "This shape has not been submitted and cannot be deleted.", "WARNING", JOptionPane.WARNING_MESSAGE);
+                }
+                else {
+                    ServerConnect.deleteDrawing(serverId);
+                    if(ServerConnect.getReceipt().getResult().equals("ok")){
+                        JOptionPane.showMessageDialog(mainFrame, "Delete successfully, the id is" + ServerConnect.getResultData().getData().getId());
+                        drawingController.removeShapeFromServer(serverId);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(mainFrame, "Delete failed");
+                    }
+                    drawingAreaPanel.setSelectedShape(null);
+                }
+            }
+        });
+        topPanel.add(deleteDrawing);
 
 
         undoButton = createButton("Undo");
@@ -238,7 +284,6 @@ public class DrawingView implements PropertyChangeListener {
         rotationButton.addActionListener(e -> {
             //drawingController.controlClear();
             drawingAreaPanel.setRotationAngle(0);
-            //drawingAreaPanel.rotateSelectedShape();
             mainFrame.repaint();
         });
         leftPanel.add(rotationButton);
@@ -250,6 +295,7 @@ public class DrawingView implements PropertyChangeListener {
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
     }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         redoButton.setEnabled(!model.isRedoStackEmpty());

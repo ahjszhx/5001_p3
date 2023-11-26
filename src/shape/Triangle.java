@@ -7,7 +7,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
 
-public class Triangle extends Shape{
+public class Triangle extends Shape {
 
     private int x2;
 
@@ -58,6 +58,7 @@ public class Triangle extends Shape{
         int x3 = (int) (startPoint.getX() + endPoint.getX()) / 2;
         int y3 = (int) (startPoint.getY() - height);
 
+        setWebProperties(x3, y3);
         // 创建Polygon对象，表示一个多边形
         Polygon triangle = new Polygon();
         triangle.addPoint(x1, y1);
@@ -108,7 +109,7 @@ public class Triangle extends Shape{
         return triangle.contains(point.getX(), point.getY());
     }
 
-    private void setWebProperties(int x3,int y3) {
+    private void setWebProperties(int x3, int y3) {
         this.x2 = endPoint.x;
         this.y2 = endPoint.y;
         this.x3 = x3;
@@ -120,14 +121,28 @@ public class Triangle extends Shape{
 
     @Override
     public JsonObject toJson() {
-        JsonObjectBuilder builder = Json.createObjectBuilder()
-                .add("x2", x2)
-                .add("y2", y2)
-                .add("x3", x3)
-                .add("y3", y3)
-                .add("rotation",rotation)
-                .add("borderWidth",borderWidth)
-                .add("fillColor", fillColor);
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        if (x2 != 0) {
+            builder.add("x2", x2);
+        }
+        if (y2 != 0) {
+            builder.add("y2", y2);
+        }
+        if (x3 != 0) {
+            builder.add("x3", x3);
+        }
+        if (y3 != 0) {
+            builder.add("y3", y3);
+        }
+        if (rotation != 0) {
+            builder.add("rotation", rotation);
+        }
+        if (borderWidth != 0) {
+            builder.add("borderWidth", borderWidth);
+        }
+        if (fillColor != null) {
+            builder.add("fillColor", fillColor);
+        }
         return builder.build();
     }
 
@@ -204,13 +219,8 @@ public class Triangle extends Shape{
         this.fillColor = fillColor;
     }
 
-    @Override
-    public float getBorderWidth() {
-        return borderWidth;
-    }
 
-    @Override
-    public void setBorderWidth(float borderWidth) {
-        this.borderWidth = borderWidth;
+    public int getRotation() {
+        return rotation;
     }
 }

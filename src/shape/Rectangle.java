@@ -91,13 +91,25 @@ public class Rectangle extends Shape {
 
 
     public JsonObject toJson() {
-        JsonObjectBuilder builder = Json.createObjectBuilder()
-                .add("width", width)
-                .add("height", height)
-                .add("rotation", rotation)
-                .add("borderColor", borderColor)
-                .add("borderWidth",borderWidth)
-                .add("fillColor", fillColor);
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        if (width != 0) {
+            builder.add("width", width);
+        }
+        if (height != 0) {
+            builder.add("height", height);
+        }
+        if (rotation != 0) {
+            builder.add("rotation", rotation);
+        }
+        if (borderColor != null) {
+            builder.add("borderColor", borderColor);
+        }
+        if (borderWidth != 0) {
+            builder.add("borderWidth", borderWidth);
+        }
+        if (fillColor != null) {
+            builder.add("fillColor", fillColor);
+        }
         return builder.build();
     }
 
@@ -158,5 +170,7 @@ public class Rectangle extends Shape {
         this.rotation = rotation;
     }
 
-
+    public int getRotation() {
+        return rotation;
+    }
 }

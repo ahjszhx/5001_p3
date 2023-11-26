@@ -16,13 +16,15 @@ public class ServerConnect {
 
     private static String initResponse = "";
 
-    private static String addResponse = "";
-
     private static String getResponse = "";
+
+    private static String deleteResponse = "";
 
     private static List<Shape> serverShapes = new ArrayList<>();
 
     private static ResultData resultData;
+
+    private static Receipt receipt;
 
     public static void initializeSocket() {
         String serverAddress = "cs5001-p3.dynv6.net";
@@ -40,18 +42,40 @@ public class ServerConnect {
         }
     }
 
-    public static void addDrawing(DrawingData drawingData) {
-        //DrawingData drawingData = new DrawingData(model.getShapeList().get(model.getShapeList().size() - 1));
-        DrawingAction drawingAction = new DrawingAction("addDrawing", drawingData);
-        String requestBody = drawingAction.toJson();
+    public static void addOrUpdateDrawing(ClientAction serverAction) {
+        String requestBody = serverAction.toJson();
+        System.out.println("clientAction=>"+requestBody);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println(requestBody);
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
             writer.println(requestBody);
-            addResponse = reader.readLine();
-            System.out.println("addResponse=>" + addResponse);
-            resultData = JsonParser.parseAddResult(addResponse);
+            String response = reader.readLine();
+            if(serverAction.getAction().equals("addDrawing")){
+                System.out.println("addResponse=>" + response);
+                resultData = JsonParser.parseAddResult(response);
+            }else {
+                System.out.println("updateResponse=>" + response);
+                receipt = JsonParser.parseReceipt(response);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteDrawing(String serverId) {
+        DeleteAction deleteAction = new DeleteAction();
+        deleteAction.setData(new DeleteAction.Data(serverId));
+        String requestBody = deleteAction.toJson();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            System.out.println(requestBody);
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            writer.println(requestBody);
+            deleteResponse = reader.readLine();
+            System.out.println("deleteResponse=>" + deleteResponse);
+            receipt = JsonParser.parseReceipt(deleteResponse);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,43 +109,15 @@ public class ServerConnect {
         }
     }
 
-    public static String getInitResponse() {
-        return initResponse;
-    }
-
-    public static void setInitResponse(String initResponse) {
-        ServerConnect.initResponse = initResponse;
-    }
-
-    public static String getAddResponse() {
-        return addResponse;
-    }
-
-    public static void setAddResponse(String addResponse) {
-        ServerConnect.addResponse = addResponse;
-    }
-
-    public static String getGetResponse() {
-        return getResponse;
-    }
-
-    public static void setGetResponse(String getResponse) {
-        ServerConnect.getResponse = getResponse;
-    }
-
     public static List<Shape> getServerShapes() {
         return serverShapes;
-    }
-
-    public static void setServerShapes(List<Shape> serverShapes) {
-        ServerConnect.serverShapes = serverShapes;
     }
 
     public static ResultData getResultData() {
         return resultData;
     }
 
-    public static void setResultData(ResultData resultData) {
-        ServerConnect.resultData = resultData;
+    public static Receipt getReceipt() {
+        return receipt;
     }
 }

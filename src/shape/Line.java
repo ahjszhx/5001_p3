@@ -85,11 +85,19 @@ public class Line extends Shape {
 
     @Override
     public JsonObject toJson() {
-        JsonObjectBuilder builder = Json.createObjectBuilder()
-                .add("x2", x2)
-                .add("y2", y2)
-                .add("lineColor", lineColor)
-                .add("lineWidth", lineWidth);
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        if (x2 != 0) {
+            builder.add("x2", x2);
+        }
+        if (y2 != 0) {
+            builder.add("y2", y2);
+        }
+        if (lineColor != null) {
+            builder.add("lineColor", lineColor);
+        }
+        if (lineWidth != 0) {
+            builder.add("lineWidth", lineWidth);
+        }
         return builder.build();
     }
 
@@ -122,6 +130,27 @@ public class Line extends Shape {
         }
     }
 
+    @Override
+    public Line clone() {
+        Line clonedLine = new Line();
+        clonedLine.setUuid(this.getUuid());
+        clonedLine.setInnerId(this.getInnerId());
+        clonedLine.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
+        clonedLine.setFillColorModel(new Color(this.fillColorModel.getRGB()));
+        clonedLine.setBorderWidth(this.borderWidth);
+
+        // 复制引用类型属性
+        if (this.startPoint != null) {
+            clonedLine.setStartPoint(new Point(this.startPoint));
+        }
+
+        if (this.endPoint != null) {
+            clonedLine.setEndPoint(new Point(this.endPoint));
+        }
+
+        return clonedLine;
+    }
+
 
     public int getX2() {
         return x2;
@@ -147,25 +176,13 @@ public class Line extends Shape {
         this.lineWidth = lineWidth;
     }
 
-
-    @Override
-    public Line clone() {
-        Line clonedLine = new Line();
-        clonedLine.setUuid(this.getUuid());
-        clonedLine.setInnerId(this.getInnerId());
-        clonedLine.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
-        clonedLine.setFillColorModel(new Color(this.fillColorModel.getRGB()));
-        clonedLine.setBorderWidth(this.borderWidth);
-
-        // 复制引用类型属性
-        if (this.startPoint != null) {
-            clonedLine.setStartPoint(new Point(this.startPoint));
-        }
-
-        if (this.endPoint != null) {
-            clonedLine.setEndPoint(new Point(this.endPoint));
-        }
-
-        return clonedLine;
+    public String getLineColor() {
+        return lineColor;
     }
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+
 }
