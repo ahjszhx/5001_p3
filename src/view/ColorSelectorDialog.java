@@ -58,7 +58,7 @@ public class ColorSelectorDialog extends JDialog {
 
         setContentPane(colorPanel);
         setSize(300, 200);
-        setLocationRelativeTo(getParent()); // 将对话框显示在 mainFrame 中央
+        setLocationRelativeTo(getParent());
     }
 
 

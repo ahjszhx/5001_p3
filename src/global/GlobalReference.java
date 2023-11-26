@@ -1,6 +1,5 @@
 package global;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ public class GlobalReference {
     public final static Map<Color, String> COLOR_STR = new HashMap<Color, String>();
 
     static {
-
 
         drawButtons.add("Line");
         drawButtons.add("Rectangle");

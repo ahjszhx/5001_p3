@@ -6,13 +6,8 @@ import shape.Line;
 import shape.Rectangle;
 import shape.Shape;
 import shape.Triangle;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import java.awt.*;
 import java.util.Map;
-import java.util.UUID;
 
 public class DrawingInfo {
 
@@ -39,65 +34,6 @@ public class DrawingInfo {
 
     private Map<String, Object> properties;
 
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
-    }
-
-    public String getModified() {
-        return modified;
-    }
-
-    public void setModified(String modified) {
-        this.modified = modified;
-    }
-
-    public boolean isOwner() {
-        return isOwner;
-    }
-
-    public void setOwner(boolean owner) {
-        isOwner = owner;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public DrawingInfo() {
-    }
 
     public DrawingInfo(String id, String created, String modified, boolean isOwner, String type, int x, int y, Map<String, Object> properties) {
         this.id = id;
@@ -200,20 +136,4 @@ public class DrawingInfo {
                 '}';
     }
 
-//    public JsonObject toJson(boolean add) {
-//        JsonObjectBuilder builder = Json.createObjectBuilder()
-//                .add("created", created)
-//                .add("modified", modified)
-//                .add("isOwner", isOwner)
-//                .add("type", type)
-//                .add("x", x)
-//                .add("y", y);
-//        if(!add)
-//        // If shape is not null, add it to the JSON
-//        if (this.properties != null) {
-//            builder.add("properties", properties.());
-//        }
-//
-//        return builder.build();
-//    }
 }

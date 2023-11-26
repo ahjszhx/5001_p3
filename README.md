@@ -14,6 +14,7 @@ Operation Demonstration:
 
 7、Rotation of the shapes
 9、Select a previously drawn object and change its location, color or size
+
 10、Use networking to sharing drawings with other users using the protocol specified below
 
 ## How to run it

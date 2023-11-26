@@ -20,22 +20,15 @@ import java.util.Map;
 public class JsonParser {
 
     public static List<DrawingInfo> parseInfos(String jsonString) {
-        // 替换下面的 jsonString 变量为你的 JSON 字符串
-        //String jsonString = "[{\"id\":\"0aed29ae-1099-4d95-813f-bd88ad456a45\",\"created\":\"timeString\",\"modified\":\"timeString\",\"isOwner\":true,\"type\":\"rectangle\",\"x\":10,\"y\":10,\"properties\":{\"width\":10,\"height\":10,\"lineColor\":\"red\"}}]";
         System.out.println("parseBegin=>" + jsonString);
         List<DrawingInfo> drawingInfos = new ArrayList<>();
-        // 使用 JsonReader 解析 JSON 字符串
         try (JsonReader jsonReader = Json.createReader(new StringReader(jsonString))) {
             JsonArray jsonArray = jsonReader.readArray();
-            // 遍历 JSON 数组
             for (JsonValue jsonValue : jsonArray) {
-                //System.out.println(jsonValue.getValueType());
                 if (jsonValue.getValueType() == JsonValue.ValueType.OBJECT) {
-                    // 处理 JSON 对象
                     JsonObject jsonObject = (JsonObject) jsonValue;
 
                     try {
-                        // 获取对象中的属性
                         String id = jsonObject.getString("id");
                         String created = jsonObject.getString("created");
                         String modified = jsonObject.getString("modified");

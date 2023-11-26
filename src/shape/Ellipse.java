@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 
 public class Ellipse extends Shape {
@@ -70,7 +69,6 @@ public class Ellipse extends Shape {
         double a = Math.abs(endPoint.getX() - startPoint.getX()) / 2.0;
         double b = Math.abs(endPoint.getY() - startPoint.getY()) / 2.0;
 
-        // 使用 Ellipse2D 类的 contains 方法来判断点是否在椭圆内
         Ellipse2D.Double ellipse = new Ellipse2D.Double(centerX - a, centerY - b, 2 * a, 2 * b);
 
         return ellipse.contains(point.getX(), point.getY());

@@ -60,42 +60,10 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
     public void setColorChosenMode(String colorChosenMode) {
         this.colorChosenMode = colorChosenMode;
-    }
-
-    public double getRotationAngle() {
-        return rotationAngle;
-    }
-
-    public void setRotationAngle(double rotationAngle) {
-        this.rotationAngle = rotationAngle;
-    }
-
-    public void setDrawMode(String drawMode) {
-        this.drawMode = drawMode;
-    }
-
-    public Color getBorderColor() {
-        return borderColor;
-    }
-
-    public void setBorderColor(Color color) {
-        this.borderColor = color;
-    }
-
-    public Color getFillColor() {
-        return fillColor;
-    }
-
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    public float getBorderWidth() {
-        return borderWidth;
-    }
-
-    public void setBorderWidth(float borderWidth) {
-        this.borderWidth = borderWidth;
+        if (selectedShape != null) {
+            System.out.println(this.selectedShape.getInnerId() + ",I am selected");
+            this.initialSelectedShapeState = selectedShape.clone();
+        }
     }
 
     @Override
@@ -109,30 +77,15 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
     }
 
 
-//    @Override
-//    public void mousePressed(MouseEvent e) {
-//        this.startPoint = e.getPoint();
-//    }
-//
-//
-//    @Override
-//    public void mouseReleased(MouseEvent e) {
-//        Point endPoint = e.getPoint();
-//        Shape shape = ShapeFactory.createShape(this.drawMode, this.startPoint, endPoint, borderColor, fillColor, borderWidth);
-//        controller.addShape(shape);
-//    }
-
-
     @Override
     public void mouseClicked(MouseEvent e) {
         //this.startPoint = e.getPoint();
 
         this.selectedShape = getTopmostSelectedShape(startPoint);
         if (selectedShape != null) {
-            System.out.println(this.selectedShape.getStartPoint().x+",I am selected");
+            System.out.println(this.selectedShape.getInnerId() + ",I am selected");
             this.initialSelectedShapeState = selectedShape.clone();
         }
-
         //this.lastMousePoint = e.getPoint();
     }
 
@@ -165,8 +118,6 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             this.prevShape = initialSelectedShapeState.clone();
             // Repaint the panel
             repaint();
-            // Push the changes to the undo stack
-            //controller.updateShapeList(shapeList);
             if (rotationAngle == 0) {
                 controller.updateShape(selectedShape, prevShape);
                 selectedShape = null;
@@ -213,7 +164,6 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
     }
 
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         shapeList = (ArrayList<Shape>) evt.getNewValue();
@@ -253,5 +203,58 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         return null;
     }
 
+    public void setRotationAngle(double rotationAngle) {
+        this.rotationAngle = rotationAngle;
+    }
 
+    public void setDrawMode(String drawMode) {
+        this.drawMode = drawMode;
+    }
+
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Color color) {
+        this.borderColor = color;
+        if (this.selectedShape != null) {
+            selectedShape.setBorderColorModel(color);
+        }
+        this.changeShapeProperty();
+    }
+
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
+        if (this.selectedShape != null) {
+            selectedShape.setFillColorModel(fillColor);
+        }
+        changeShapeProperty();
+    }
+
+    public float getBorderWidth() {
+        return borderWidth;
+    }
+
+    public void setBorderWidth(float borderWidth) {
+        this.borderWidth = borderWidth;
+        if (this.selectedShape != null) {
+            selectedShape.setBorderWidth(borderWidth);
+        }
+        changeShapeProperty();
+    }
+
+    private void changeShapeProperty() {
+        if (selectedShape != null) {
+            // Calculate mouse movement
+            this.prevShape = initialSelectedShapeState.clone();
+            // Repaint the panel
+            controller.updateShape(selectedShape, prevShape);
+            selectedShape = null;
+            repaint();
+        }
+    }
 }

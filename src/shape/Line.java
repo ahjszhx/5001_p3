@@ -43,17 +43,14 @@ public class Line extends Shape {
         double endXTranslated = endPoint.getX() - midX;
         double endYTranslated = endPoint.getY() - midY;
 
-        // Convert the angle to radians
         double radians = Math.toRadians(angle);
 
-        // Apply rotation
         double newX1 = startXTranslated * Math.cos(radians) - startYTranslated * Math.sin(radians);
         double newY1 = startXTranslated * Math.sin(radians) + startYTranslated * Math.cos(radians);
 
         double newX2 = endXTranslated * Math.cos(radians) - endYTranslated * Math.sin(radians);
         double newY2 = endXTranslated * Math.sin(radians) + endYTranslated * Math.cos(radians);
 
-        // Translate back to the original position
         newX1 += midX;
         newY1 += midY;
         newX2 += midX;
@@ -142,16 +139,8 @@ public class Line extends Shape {
         this.y2 = y2;
     }
 
-    public String getLineColor() {
-        return lineColor;
-    }
-
     public void setLineColor(String lineColor) {
         this.lineColor = lineColor;
-    }
-
-    public int getLineWidth() {
-        return lineWidth;
     }
 
     public void setLineWidth(int lineWidth) {

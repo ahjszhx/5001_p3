@@ -58,10 +58,8 @@ public class DrawingModelTest {
     @Test
     public void testUpdateShape() {
 
-        //Shape originalShape = new Shape(/* provide necessary parameters */);
         drawingModel.addShape(originShape1);
 
-        //Shape updatedShape = new Shape(/* provide necessary parameters */);
         drawingModel.updateShape(updatedShape1, originShape1);
 
         assertTrue(drawingModel.getShapeList().contains(updatedShape1));

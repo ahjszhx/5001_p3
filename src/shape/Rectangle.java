@@ -6,7 +6,6 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
-import java.util.Locale;
 
 public class Rectangle extends Shape {
 
@@ -68,13 +67,11 @@ public class Rectangle extends Shape {
         g.setStroke(new BasicStroke(borderWidth));
 
         if (lockRatio) {
-            // 如果 lockRatio 为 true，画正方形的边框
             int width = maxX - minX;
             int height = maxY - minY;
             int sideLength = Math.min(width, height);
             g.drawRect(minX, minY, sideLength, sideLength);
         } else {
-            // 如果 lockRatio 为 false，画长方形的边框
             g.drawRect(minX, minY, maxX - minX, maxY - minY);
         }
     }
@@ -113,7 +110,7 @@ public class Rectangle extends Shape {
         rectangle.setFillColorModel(new Color(this.fillColorModel.getRGB()));
         rectangle.setBorderWidth(this.borderWidth);
 
-        // 复制引用类型属性
+
         if (this.startPoint != null) {
             rectangle.setStartPoint(new Point(this.startPoint));
         }
@@ -155,10 +152,6 @@ public class Rectangle extends Shape {
 
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
-    }
-
-    public int getRotation() {
-        return rotation;
     }
 
     public void setRotation(int rotation) {

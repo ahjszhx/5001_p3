@@ -35,17 +35,11 @@ public class DrawingAction implements Serializable {
         return currentShape;
     }
 
-    public void setCurrentShape(Shape currentShape) {
-        this.currentShape = currentShape;
-    }
 
     public Shape getPrevShape() {
         return prevShape;
     }
 
-    public void setPrevShape(Shape prevShape) {
-        this.prevShape = prevShape;
-    }
 
     @Override
     public DrawingAction clone() {

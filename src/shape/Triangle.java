@@ -33,7 +33,6 @@ public class Triangle extends Shape{
 
     @Override
     public void move(int deltaX, int deltaY) {
-        // 移动三角形的三个顶点
         this.startPoint.setLocation(this.startPoint.getX() + deltaX, this.startPoint.getY() + deltaY);
         this.endPoint.setLocation(this.endPoint.getX() + deltaX, this.endPoint.getY() + deltaY);
     }
@@ -183,10 +182,6 @@ public class Triangle extends Shape{
 
     public void setY3(int y3) {
         this.y3 = y3;
-    }
-
-    public int getRotation() {
-        return rotation;
     }
 
     public void setRotation(int rotation) {

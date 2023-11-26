@@ -25,7 +25,6 @@ public abstract class Shape implements Serializable {
 
     protected float borderWidth = 1;
 
-
     public Shape() {
     }
 

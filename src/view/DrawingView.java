@@ -7,6 +7,7 @@ import http.DrawingData;
 import http.DrawingInfo;
 import http.JsonParser;
 import http.ResultData;
+import http.ServerConnect;
 import model.DrawingModel;
 import shape.Shape;
 
@@ -38,25 +39,13 @@ public class DrawingView implements PropertyChangeListener {
 
     private DrawingPanel drawingAreaPanel;
 
-    private DrawingModel model;
+    private static DrawingModel model;
 
     private DrawingController drawingController;
 
     private JButton undoButton;
 
     private JButton redoButton;
-
-    private static Socket socket;
-
-    private static String initResponse = "";
-
-    private static String addResponse = "";
-
-    private static String getResponse = "";
-
-    private static List<Shape> serverShapes = new ArrayList<>();
-
-    private static ResultData resultData;
 
 
     public DrawingView(DrawingModel model, DrawingController controller) {
@@ -66,12 +55,10 @@ public class DrawingView implements PropertyChangeListener {
         initializeView();
         model.addListener(this);
         model.addListener(drawingAreaPanel);
-        initializeSocket();
+        ServerConnect.initializeSocket();
     }
 
     private void initializeView() {
-
-        //SwingUtilities.invokeLater(() -> {
 
         mainFrame = new JFrame("Vector Drawing App");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,8 +69,8 @@ public class DrawingView implements PropertyChangeListener {
 
         JButton requestDrawings = createButton("getDrawings");
         requestDrawings.addActionListener(e -> {
-            getDrawings();
-            drawingController.loadFromServer(serverShapes);
+            ServerConnect.getDrawings();
+            drawingController.loadFromServer(ServerConnect.getServerShapes());
         });
         topPanel.add(requestDrawings);
 
@@ -92,10 +79,11 @@ public class DrawingView implements PropertyChangeListener {
             if (model.getShapeList().size() == 0) {
                 JOptionPane.showMessageDialog(mainFrame, "Please draw a graph before submitting.", "WARNING", JOptionPane.WARNING_MESSAGE);
             } else {
-                addDrawing();
-                JOptionPane.showMessageDialog(mainFrame, "Submit successfully, the id is" + resultData.getData().getId());
+                DrawingData drawingData = new DrawingData(model.getShapeList().get(model.getShapeList().size() - 1));
+                ServerConnect.addDrawing(drawingData);
+                JOptionPane.showMessageDialog(mainFrame, "Submit successfully, the id is" + ServerConnect.getResultData().getData().getId());
             }
-            drawingController.setAddResult(addResponse);
+            drawingController.setAddResult(ServerConnect.getAddResponse());
         });
         topPanel.add(submit);
 
@@ -121,7 +109,7 @@ public class DrawingView implements PropertyChangeListener {
         saveButton.addActionListener(e -> {
             JFileChooser jfc = new JFileChooser();
             jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            jfc.setSelectedFile(new File("new file.png"));
+            jfc.setSelectedFile(new File(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss"))+".png"));
             int statusCode = jfc.showDialog(mainFrame, "save");
             if (statusCode == JFileChooser.APPROVE_OPTION) {
                 if (drawingController.saveAsPNG(drawingAreaPanel, jfc.getSelectedFile().getPath())) {
@@ -132,10 +120,8 @@ public class DrawingView implements PropertyChangeListener {
             } else if (statusCode == JFileChooser.ERROR_OPTION) {
                 JOptionPane.showMessageDialog(mainFrame, "unknown error!");
             }
-
-            topPanel.add(saveButton);
         });
-
+        topPanel.add(saveButton);
         JButton saveAsFileButton = createButton("Save As File");
         saveAsFileButton.addActionListener(e -> {
             JFileChooser jfc = new JFileChooser();
@@ -263,72 +249,7 @@ public class DrawingView implements PropertyChangeListener {
 
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
-        //});
     }
-
-
-    private static void initializeSocket() {
-        String serverAddress = "cs5001-p3.dynv6.net";
-        int serverPort = 8080;
-        try {
-            socket = new Socket(serverAddress, serverPort);
-            String loginCommand = "{\"action\": \"login\", \"data\": {\"token\": \"49468b90-9ee2-4f75-81ae-a4d228ff2268\"}}";
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            writer.println(loginCommand);
-            initResponse = reader.readLine();
-            System.out.println("init response=>" + initResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addDrawing() {
-        DrawingData drawingData = new DrawingData(model.getShapeList().get(model.getShapeList().size() - 1));
-        DrawingAction drawingAction = new DrawingAction("addDrawing", drawingData);
-        String requestBody = drawingAction.toJson();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            System.out.println(requestBody);
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            writer.println(requestBody);
-            addResponse = reader.readLine();
-            System.out.println("addResponse=>" + addResponse);
-            resultData = JsonParser.parseAddResult(addResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void getDrawings() {
-        try {
-            String getDrawingsCommand = "{\"action\": \"getDrawings\"}";
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            // Send the request to the server
-            writer.println(getDrawingsCommand);
-            getResponse = reader.readLine();
-            System.out.println("getResponse=>: " + getResponse);
-            List<DrawingInfo> drawingInfoList = JsonParser.parseInfos(getResponse);
-            System.out.println("Number of drawings: " + drawingInfoList.size());
-            for (DrawingInfo drawingInfo : drawingInfoList) {
-                try {
-                    Shape shape = drawingInfo.getShapeInstance();
-                    if (shape != null) {
-                        serverShapes.add(shape);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            System.out.println("serverShapes=>" + serverShapes.size());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         redoButton.setEnabled(!model.isRedoStackEmpty());
