@@ -116,6 +116,7 @@ public class DrawingView implements PropertyChangeListener {
                 JOptionPane.showMessageDialog(mainFrame, "Please select a shape before deleting.", "WARNING", JOptionPane.WARNING_MESSAGE);
             } else {
                 String serverId = drawingAreaPanel.getSelectedShape().getUuid();
+                String innerId = drawingAreaPanel.getSelectedShape().getInnerId();
                 if(serverId==null){
                     JOptionPane.showMessageDialog(mainFrame, "This shape has not been submitted and cannot be deleted.", "WARNING", JOptionPane.WARNING_MESSAGE);
                 }
@@ -123,7 +124,7 @@ public class DrawingView implements PropertyChangeListener {
                     ServerConnect.deleteDrawing(serverId);
                     if(ServerConnect.getReceipt().getResult().equals("ok")){
                         JOptionPane.showMessageDialog(mainFrame, "Delete successfully, the id is" + ServerConnect.getResultData().getData().getId());
-                        drawingController.removeShapeFromServer(serverId);
+                        drawingController.removeShapeFromServer(serverId,innerId);
                     }
                     else {
                         JOptionPane.showMessageDialog(mainFrame, "Delete failed");
@@ -281,14 +282,18 @@ public class DrawingView implements PropertyChangeListener {
                     rotationTextField.setText("Input Rotation Angle");
                     rotationTextField.setForeground(Color.GRAY);
                 }
-                //drawingAreaPanel.setRotationAngle(Double.parseDouble(rotationTextField.getText()));
+                //
             }
         });
         JButton rotationButton = createLeftButton("Rotate Shape");
         rotationButton.addActionListener(e -> {
-            //drawingController.controlClear();
+            if(rotationTextField.getText().isEmpty()){
+                JOptionPane.showMessageDialog(mainFrame, "Please enter rotation degree.");
+            }
+            else {
+                drawingAreaPanel.setRotationAngle(Double.parseDouble(rotationTextField.getText()));
+            }
             drawingAreaPanel.rotateSelectedShape();
-            //drawingAreaPanel.setRotationAngle(0);
             mainFrame.repaint();
         });
         leftPanel.add(rotationButton);

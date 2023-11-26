@@ -3,6 +3,7 @@ package view;
 import controller.DrawingController;
 import shape.Shape;
 import shape.ShapeFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -107,7 +108,9 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
             // If there was significant movement, treat it as a drag and don't perform other operations
             // Move the selected shape
-            selectedShape.move(dx, dy);
+            if (dx != 0 && dy != 0) {
+                selectedShape.move(dx, dy);
+            }
 
             // Update the last known mouse position
             lastMousePoint = e.getPoint();

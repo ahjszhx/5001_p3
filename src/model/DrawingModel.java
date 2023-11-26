@@ -61,10 +61,10 @@ public class DrawingModel {
         updateList();
     }
 
-    public void removeShapeFromServer(String serverId) {
+    public void removeShapeFromServer(String serverId,String innerId) {
         int index = 0;
         for (Shape shape : shapeList) {
-            if (shape.getUuid().equals(serverId)) {
+            if (shape.getUuid().equals(serverId)||shape.getInnerId().equals(innerId)) {
                 index = shapeList.indexOf(shape);
             }
         }

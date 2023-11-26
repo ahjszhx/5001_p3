@@ -36,8 +36,8 @@ public class DrawingController{
         model.setShapeServerId(serverId,innerId);
     }
 
-    public void removeShapeFromServer(String serverId) {
-        model.removeShapeFromServer(serverId);
+    public void removeShapeFromServer(String serverId,String innerId) {
+        model.removeShapeFromServer(serverId,innerId);
     }
 
 
