@@ -191,6 +191,8 @@ public class DrawingModel {
      * Clears all shapes from the drawing model.
      */
     public void clear() {
+        undoStack.clear();
+        redoStack.clear();
         shapeList.clear();
         updateList();
     }
@@ -224,6 +226,7 @@ public class DrawingModel {
                         realShape.setFillColorModel(updatedShape.getFillColorModel());
                         realShape.setBorderColorModel(updatedShape.getBorderColorModel());
                         realShape.setBorderWidth(updatedShape.getBorderWidth());
+                        realShape.setRotation(updatedShape.getRotation());
                     }
                 }
                 break;
@@ -251,6 +254,7 @@ public class DrawingModel {
                         realShape.setFillColorModel(originalShape.getFillColorModel());
                         realShape.setBorderColorModel(originalShape.getBorderColorModel());
                         realShape.setBorderWidth(originalShape.getBorderWidth());
+                        realShape.setRotation(originalShape.getRotation());
                     }
                 }
                 break;

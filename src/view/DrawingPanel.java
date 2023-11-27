@@ -217,12 +217,13 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             //String input = JOptionPane.showInputDialog(this, "Enter Rotation Angle:");
             if (rotationAngle != 0) {
                 try {
+                    this.prevShape = initialSelectedShapeState.clone();
                     // 旋转选中的图形
                     selectedShape.rotate(rotationAngle);
                     // 重新绘制界面
                     repaint();
                     // 更新图形状态
-                    controller.updateShape(selectedShape, initialSelectedShapeState);
+                    controller.updateShape(selectedShape.clone(), prevShape);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid number.");
                 }

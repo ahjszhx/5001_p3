@@ -21,7 +21,7 @@ public class Triangle extends Shape {
 
     private int y3;
 
-    private int rotation = 0;
+    //private int rotation = 0;
 
     private String borderColor;
 
@@ -188,7 +188,7 @@ public class Triangle extends Shape {
         triangle.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
         triangle.setFillColorModel(new Color(this.fillColorModel.getRGB()));
         triangle.setBorderWidth(this.borderWidth);
-
+        triangle.setRotation(this.rotation);
         // 复制引用类型属性
         if (this.startPoint != null) {
             triangle.setStartPoint(new Point(this.startPoint));

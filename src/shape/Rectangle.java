@@ -18,7 +18,7 @@ public class Rectangle extends Shape {
 
     private int height;
 
-    private int rotation = 0;
+    //private int rotation = 0;
 
     private String borderColor;
 
@@ -178,7 +178,7 @@ public class Rectangle extends Shape {
         rectangle.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
         rectangle.setFillColorModel(new Color(this.fillColorModel.getRGB()));
         rectangle.setBorderWidth(this.borderWidth);
-
+        rectangle.setRotation(this.rotation);
 
         if (this.startPoint != null) {
             rectangle.setStartPoint(new Point(this.startPoint));

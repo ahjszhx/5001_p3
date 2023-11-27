@@ -35,6 +35,8 @@ public abstract class Shape implements Serializable {
     // Width of the shape's border
     protected float borderWidth = 1;
 
+    protected int rotation = 0;
+
     /**
      * Default constructor for creating a Shape object.
      */
@@ -186,6 +188,14 @@ public abstract class Shape implements Serializable {
 
     public void setBorderWidth(float borderWidth) {
         this.borderWidth = borderWidth;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
     }
 
     public abstract Shape clone();

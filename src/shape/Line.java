@@ -195,7 +195,7 @@ public class Line extends Shape {
         clonedLine.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
         clonedLine.setFillColorModel(new Color(this.fillColorModel.getRGB()));
         clonedLine.setBorderWidth(this.borderWidth);
-
+        clonedLine.setRotation(this.rotation);
         // 复制引用类型属性
         if (this.startPoint != null) {
             clonedLine.setStartPoint(new Point(this.startPoint));
