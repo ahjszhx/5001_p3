@@ -18,8 +18,6 @@ public class Rectangle extends Shape {
 
     private int height;
 
-    //private int rotation = 0;
-
     private String borderColor;
 
     private String fillColor;

@@ -10,8 +10,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class for parsing JSON strings related to drawing information.
+ */
 public class JsonParser {
 
+    /**
+     * Parses the input JSON string representing drawing information into a list of DrawingInfo objects.
+     *
+     * @param jsonString The JSON string containing drawing information.
+     * @return A list of DrawingInfo objects parsed from the input JSON.
+     */
     public static List<DrawingInfo> parseInfos(String jsonString) {
         System.out.println("parseBegin=>" + jsonString);
         List<DrawingInfo> drawingInfos = new ArrayList<>();
@@ -168,10 +177,14 @@ public class JsonParser {
         return drawingInfos;
     }
 
-
+    /**
+     * Parses a JSON string containing the result data of an add operation and returns a ResultData object.
+     *
+     * @param jsonString The JSON string to parse.
+     * @return A ResultData object parsed from the input JSON string.
+     */
     public static ResultData parseAddResult(String jsonString) {
         ResultData resultData = new ResultData();
-        //String jsonString = "{\"result\":\"ok\",\"data\":{\"id\":\"c4f433b6-3175-4d0b-a733-fbdc9b192b43\"}}";
 
         try (JsonReader reader = Json.createReader(new StringReader(jsonString))) {
             JsonObject jsonObject = reader.readObject();
@@ -191,6 +204,12 @@ public class JsonParser {
         return resultData;
     }
 
+    /**
+     * Parses a JSON string containing receipt information and returns a Receipt object.
+     *
+     * @param jsonString The JSON string to parse.
+     * @return A Receipt object parsed from the input JSON string.
+     */
     public static Receipt parseReceipt(String jsonString) {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
 
