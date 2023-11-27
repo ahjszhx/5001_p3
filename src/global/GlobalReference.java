@@ -12,6 +12,12 @@ public class GlobalReference {
     public static final int PANEL_WIDTH = 900;
     public static final int PANEL_HEIGHT = 800;
 
+    public static final int TOP_BUTTON_WIDTH = 150;
+    public static final int TOP_BUTTON_HEIGHT = 30;
+
+    public static final int LEFT_BUTTON_WIDTH = 150;
+    public static final int LEFT_BUTTON_HEIGHT = 20;
+
     public final static Map<String, Color> STR_COLOR = new HashMap<String, Color>();
 
     public final static Map<Color, String> COLOR_STR = new HashMap<Color, String>();

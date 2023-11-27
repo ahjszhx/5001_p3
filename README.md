@@ -6,7 +6,7 @@
 2、Drawing rectangles
 3、Drawing ellipses
 4、Drawing triangles
-5、Undo/redo
+5、Undo/redo: Including adding files, modifying file properties and other operations
 6、Different border/line color, border/line width, or fill colors (if applicable) for each shape
 8、Support for drawing squares and circles. I added square and circle buttons that lock the aspect ratio of the ellipse and rectangle when drawn
 Operation Demonstration of features above:

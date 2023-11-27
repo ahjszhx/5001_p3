@@ -6,6 +6,7 @@ import http.ClientAction;
 import http.DrawingData;
 import http.ServerConnect;
 import model.DrawingModel;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -18,6 +19,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import static global.GlobalReference.LEFT_BUTTON_HEIGHT;
+import static global.GlobalReference.LEFT_BUTTON_WIDTH;
+import static global.GlobalReference.TOP_BUTTON_HEIGHT;
+import static global.GlobalReference.TOP_BUTTON_WIDTH;
 
 
 /**
@@ -78,13 +84,12 @@ public class DrawingView implements PropertyChangeListener {
                 JOptionPane.showMessageDialog(mainFrame, "Please select a shape before submitting.", "WARNING", JOptionPane.WARNING_MESSAGE);
             } else {
                 DrawingData drawingData = new DrawingData(drawingAreaPanel.getSelectedShape());
-                ClientAction serverAction = new ClientAction("addDrawing",drawingData);
+                ClientAction serverAction = new ClientAction("addDrawing", drawingData);
                 ServerConnect.addOrUpdateDrawing(serverAction);
-                if(ServerConnect.getResultData().getResult().equals("ok")){
-                    drawingController.setShapeServerId( ServerConnect.getResultData().getData().getId(),drawingAreaPanel.getSelectedShape().getInnerId());
+                if (ServerConnect.getResultData().getResult().equals("ok")) {
+                    drawingController.setShapeServerId(ServerConnect.getResultData().getData().getId(), drawingAreaPanel.getSelectedShape().getInnerId());
                     JOptionPane.showMessageDialog(mainFrame, "Submit successfully, the id is" + ServerConnect.getResultData().getData().getId());
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(mainFrame, "Submit failed");
                 }
                 drawingAreaPanel.setSelectedShape(null);
@@ -98,17 +103,15 @@ public class DrawingView implements PropertyChangeListener {
                 JOptionPane.showMessageDialog(mainFrame, "Please select a shape before updating.", "WARNING", JOptionPane.WARNING_MESSAGE);
             } else {
                 String serverId = drawingAreaPanel.getSelectedShape().getUuid();
-                if(serverId==null){
+                if (serverId == null) {
                     JOptionPane.showMessageDialog(mainFrame, "This shape has not been submitted and cannot be updated.", "WARNING", JOptionPane.WARNING_MESSAGE);
-                }
-                else {
+                } else {
                     DrawingData drawingData = new DrawingData(drawingAreaPanel.getSelectedShape());
-                    ClientAction serverAction = new ClientAction("updateDrawing",drawingData);
+                    ClientAction serverAction = new ClientAction("updateDrawing", drawingData);
                     ServerConnect.addOrUpdateDrawing(serverAction);
-                    if(ServerConnect.getResultData().getResult().equals("ok")){
+                    if (ServerConnect.getResultData().getResult().equals("ok")) {
                         JOptionPane.showMessageDialog(mainFrame, "Update successfully");
-                    }
-                    else {
+                    } else {
                         JOptionPane.showMessageDialog(mainFrame, "Update failed");
                     }
                     drawingAreaPanel.setSelectedShape(null);
@@ -125,16 +128,14 @@ public class DrawingView implements PropertyChangeListener {
             } else {
                 String serverId = drawingAreaPanel.getSelectedShape().getUuid();
                 String innerId = drawingAreaPanel.getSelectedShape().getInnerId();
-                if(serverId==null){
+                if (serverId == null) {
                     JOptionPane.showMessageDialog(mainFrame, "This shape has not been submitted and cannot be deleted.", "WARNING", JOptionPane.WARNING_MESSAGE);
-                }
-                else {
+                } else {
                     ServerConnect.deleteDrawing(serverId);
-                    if(ServerConnect.getReceipt().getResult().equals("ok")){
+                    if (ServerConnect.getReceipt().getResult().equals("ok")) {
                         JOptionPane.showMessageDialog(mainFrame, "Delete successfully, the id is" + ServerConnect.getResultData().getData().getId());
-                        drawingController.removeShapeFromServer(serverId,innerId);
-                    }
-                    else {
+                        drawingController.removeShapeFromServer(serverId, innerId);
+                    } else {
                         JOptionPane.showMessageDialog(mainFrame, "Delete failed");
                     }
                     drawingAreaPanel.setSelectedShape(null);
@@ -165,7 +166,7 @@ public class DrawingView implements PropertyChangeListener {
         saveButton.addActionListener(e -> {
             JFileChooser jfc = new JFileChooser();
             jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            jfc.setSelectedFile(new File(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss"))+".png"));
+            jfc.setSelectedFile(new File(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss")) + ".png"));
             int statusCode = jfc.showDialog(mainFrame, "save");
             if (statusCode == JFileChooser.APPROVE_OPTION) {
                 if (drawingController.saveAsPNG(drawingAreaPanel, jfc.getSelectedFile().getPath())) {
@@ -191,7 +192,7 @@ public class DrawingView implements PropertyChangeListener {
                 try {
                     drawingController.saveAsFile(jfc.getSelectedFile().getPath());
                     JOptionPane.showMessageDialog(mainFrame, "save success!");
-                } catch (IOException ioException){
+                } catch (IOException ioException) {
                     JOptionPane.showMessageDialog(mainFrame, "save failed!");
                     ioException.printStackTrace();
                 }
@@ -252,8 +253,12 @@ public class DrawingView implements PropertyChangeListener {
             if (input != null && !input.isEmpty()) {
                 try {
                     float borderWidth = Float.parseFloat(input);
-                    drawingAreaPanel.setBorderWidth(borderWidth);
-                    JOptionPane.showMessageDialog(mainFrame, "Line Width set to " + borderWidth);
+                    if (borderWidth >= 0 && borderWidth <= 100) {
+                        drawingAreaPanel.setBorderWidth(borderWidth);
+                        JOptionPane.showMessageDialog(mainFrame, "Line Width set to " + borderWidth);
+                    } else {
+                        JOptionPane.showMessageDialog(mainFrame, "Please enter a number between 0 and 100.");
+                    }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(mainFrame, "Invalid input. Please enter a valid number.");
                 }
@@ -291,16 +296,23 @@ public class DrawingView implements PropertyChangeListener {
                     rotationTextField.setText("Input Rotation Angle");
                     rotationTextField.setForeground(Color.GRAY);
                 }
-                //
             }
         });
         JButton rotationButton = createLeftButton("Rotate Shape");
         rotationButton.addActionListener(e -> {
-            if(rotationTextField.getText().isEmpty()){
+            if (rotationTextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(mainFrame, "Please enter rotation degree.");
-            }
-            else {
-                drawingAreaPanel.setRotationAngle(Double.parseDouble(rotationTextField.getText()));
+            } else {
+                try {
+                    double rotationDegree = Double.parseDouble(rotationTextField.getText());
+                    if ((rotationDegree < 0 || rotationDegree > 359)) {
+                        JOptionPane.showMessageDialog(mainFrame, "The rotation is in degrees between 0 to 359");
+                    } else {
+                        drawingAreaPanel.setRotationAngle(rotationDegree);
+                    }
+                } catch (NumberFormatException exception) {
+                    JOptionPane.showMessageDialog(mainFrame, "Invalid input. Please enter a valid number.");
+                }
             }
             drawingAreaPanel.rotateSelectedShape();
             mainFrame.repaint();
@@ -330,14 +342,14 @@ public class DrawingView implements PropertyChangeListener {
     private static JButton createButton(String text) {
         JButton button = new JButton(text);
         // 设置按钮大小
-        button.setPreferredSize(new Dimension(150, 30));
+        button.setPreferredSize(new Dimension(TOP_BUTTON_WIDTH, TOP_BUTTON_HEIGHT));
         return button;
     }
 
     private static JButton createLeftButton(String text) {
         JButton button = new JButton(text);
         // 设置按钮大小
-        button.setPreferredSize(new Dimension(150, 20));
+        button.setPreferredSize(new Dimension(LEFT_BUTTON_WIDTH, LEFT_BUTTON_HEIGHT));
         return button;
     }
 
