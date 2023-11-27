@@ -6,6 +6,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 /**
  * The Triangle class represents a triangle shape in the drawing application.
@@ -71,9 +72,10 @@ public class Triangle extends Shape {
         int height = (int) (Math.sqrt(3) / 2 * (endPoint.x - startPoint.x));
 
         int x1 = (int) startPoint.getX();
-        int y1 = (int) endPoint.getY();
+        int y1 = (int) startPoint.getY();
         int x2 = (int) endPoint.getX();
-        int y2 = (int) endPoint.getY();
+        int y2 = (int) startPoint.getY();
+
         int x3 = (int) (startPoint.getX() + endPoint.getX()) / 2;
         int y3 = (int) (startPoint.getY() - height);
 
@@ -147,7 +149,13 @@ public class Triangle extends Shape {
 
         triangle.addPoint(x3, y3);
 
-        return triangle.contains(point.getX(), point.getY());
+        // 将鼠标按下的坐标转换为整数
+        int mouseX = (int) point.getX();
+        int mouseY = (int) point.getY();
+
+        System.out.println("contains=>"+triangle.contains(mouseX, mouseY));
+        // 检查点是否在等边三角形中
+        return triangle.contains(mouseX, mouseY);
     }
 
     /**

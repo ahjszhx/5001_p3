@@ -222,12 +222,6 @@ public class DrawingModel {
                 for (Shape realShape : shapeList) {
                     if (updatedShape.getInnerId().equals(realShape.getInnerId())) {
                         realShape.setRedoOperations(updatedShape);
-//                        realShape.setStartPoint(updatedShape.getStartPoint());
-//                        realShape.setEndPoint(updatedShape.getEndPoint());
-//                        realShape.setFillColorModel(updatedShape.getFillColorModel());
-//                        realShape.setBorderColorModel(updatedShape.getBorderColorModel());
-//                        realShape.setBorderWidth(updatedShape.getBorderWidth());
-//                        realShape.setRotation(updatedShape.getRotation());
                     }
                 }
                 break;
@@ -251,12 +245,6 @@ public class DrawingModel {
                 for (Shape realShape : shapeList) {
                     if (originalShape.getInnerId().equals(realShape.getInnerId())) {
                         realShape.setRedoOperations(originalShape);
-//                        realShape.setStartPoint(originalShape.getStartPoint());
-//                        realShape.setEndPoint(originalShape.getEndPoint());
-//                        realShape.setFillColorModel(originalShape.getFillColorModel());
-//                        realShape.setBorderColorModel(originalShape.getBorderColorModel());
-//                        realShape.setBorderWidth(originalShape.getBorderWidth());
-//                        realShape.setRotation(originalShape.getRotation());
                     }
                 }
                 break;

@@ -3,6 +3,7 @@ package view;
 import controller.DrawingController;
 import shape.Shape;
 import shape.ShapeFactory;
+import shape.Triangle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -122,9 +123,11 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
      *
      * @param e The MouseEvent object representing the press event.
      */
+    //429,557   693,715   561 329     622,671
     @Override
     public void mousePressed(MouseEvent e) {
         this.startPoint = e.getPoint();
+        System.out.println("startPoint=>"+e.getPoint().x+","+e.getPoint().getY());
         this.selectedShape = getTopmostSelectedShape(startPoint);
         if (selectedShape != null) {
             this.initialSelectedShapeState = selectedShape.clone();
@@ -245,6 +248,9 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         Collections.reverse(reversedList);
 
         for (Shape shape : reversedList) {
+            if(shape instanceof Triangle){
+                System.out.println(shape.toJson()+","+shape.getStartPoint().x+","+shape.getStartPoint().getY());
+            }
             if (shape.contains(point)) {
                 return shape;
             }
