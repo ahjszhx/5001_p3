@@ -150,14 +150,16 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             selectedShape.move(dx, dy);
 
             // Update the last known mouse position
-            lastMousePoint = e.getPoint();
-            this.prevShape = initialSelectedShapeState.clone();
+
             // Repaint the panel
             repaint();
+            lastMousePoint = e.getPoint();
+            this.prevShape = initialSelectedShapeState.clone();
             if (rotationAngle == 0) {
                 controller.updateShape(selectedShape, prevShape);
                 selectedShape = null;
             }
+
         } else {
             Shape shape = ShapeFactory.createShape(this.drawMode, this.startPoint, endPoint, borderColor, fillColor, borderWidth);
             controller.addShape(shape);
@@ -217,13 +219,14 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
             //String input = JOptionPane.showInputDialog(this, "Enter Rotation Angle:");
             if (rotationAngle != 0) {
                 try {
-                    this.prevShape = initialSelectedShapeState.clone();
+                    Shape prevShape = selectedShape.clone();
                     // 旋转选中的图形
                     selectedShape.rotate(rotationAngle);
+                    Shape currentShape = selectedShape.clone();
                     // 重新绘制界面
                     repaint();
                     // 更新图形状态
-                    controller.updateShape(selectedShape.clone(), prevShape);
+                    controller.updateShape(currentShape, prevShape);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid number.");
                 }

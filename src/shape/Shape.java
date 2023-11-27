@@ -217,6 +217,16 @@ public abstract class Shape implements Serializable {
         return clonedShape;
     }
 
+    public void setRedoOperations(Shape updatedShape){
+        this.setStartPoint(updatedShape.getStartPoint());
+        this.setEndPoint(updatedShape.getEndPoint());
+        this.setFillColorModel(updatedShape.getFillColorModel());
+        this.setBorderColorModel(updatedShape.getBorderColorModel());
+        this.setBorderWidth(updatedShape.getBorderWidth());
+        this.setRotation(updatedShape.getRotation());
+    }
+
+
     protected abstract Shape createShapeInstance();
 
 

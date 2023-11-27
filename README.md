@@ -6,19 +6,21 @@
 2、Drawing rectangles
 3、Drawing ellipses
 4、Drawing triangles
-5、Undo/redo: Including adding files, modifying file properties and other operations
-6、Different border/line color, border/line width, or fill colors (if applicable) for each shape
-8、Support for drawing squares and circles. I added square and circle buttons that lock the aspect ratio of the ellipse and rectangle when drawn
+5、Different border/line color, border/line width, or fill colors (if applicable) for each shape
+6、Support for drawing squares and circles. I added square and circle buttons that lock the aspect ratio of the ellipse and rectangle when drawn
 Operation Demonstration of features above:
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/basicOperations.gif)
-7、Rotation of the line and rectangle/square/ellipse/triangle
+7、Undo/redo: Including adding and deleting shapes, modifying shape colours, borderLine sizes, moving or rotating shapes
+
+8、Rotation of the line and rectangle/square/ellipse/triangle
 Input the rotation angle, then mouse click to select the graphic, and then click the rotate button to achieve the rotation.
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/rotation.gif)
 9、Select a previously drawn object and change its location, color or size
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/SaveAndLoad.gif)
 Drag and drop to move the graphic, mouse click to select the graphic, you can modify the graphic colour and border attributes
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/changeLocationColor.gif)
-10、Use networking to sharing drawings with other users using the protocol specified below
+10、Use networking to sharing drawings with other users using the protocol specified below.
+I have implemented five interfaces: Login, getDrawings, addDrawing, updateDrawing, deleteDrawing, where Login will be automatically connected when the application starts, and the rest of the interfaces interact with the server through the GUI.
 Click to update or delete a selected shapes
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/networking.gif)
 

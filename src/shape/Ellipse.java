@@ -9,13 +9,15 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
+/**
+ * The Ellipse class represents an ellipse shape in the drawing application.
+ * It extends the base Shape class and provides methods specific to drawing and manipulating ellipses.
+ */
 public class Ellipse extends Shape {
 
     private int width;
 
     private int height;
-
-    //private int rotation = 0;
 
     private String borderColor;
 
@@ -28,13 +30,28 @@ public class Ellipse extends Shape {
     public Ellipse() {
     }
 
-
+    /**
+     * Parameterized constructor for creating an Ellipse object with specified attributes.
+     *
+     * @param startPoint   The starting point of the ellipse.
+     * @param endPoint     The ending point of the ellipse.
+     * @param borderColor  The color of the ellipse border.
+     * @param fillColor    The fill color of the ellipse.
+     * @param borderWidth  The width of the ellipse's border.
+     * @param lockRatio    Flag indicating whether to maintain the aspect ratio when resizing.
+     */
     public Ellipse(Point startPoint, Point endPoint, Color borderColor, Color fillColor, float borderWidth, boolean lockRatio) {
         super(startPoint, endPoint, borderColor, fillColor, borderWidth);
         this.lockRatio = lockRatio;
         updateEllipse();
     }
 
+    /**
+     * Moves the ellipse by a specified delta in the x and y directions.
+     *
+     * @param deltaX The change in x direction.
+     * @param deltaY The change in y direction.
+     */
     @Override
     public void move(int deltaX, int deltaY) {
         this.startPoint.setLocation(this.startPoint.getX() + deltaX, this.startPoint.getY() + deltaY);
@@ -42,6 +59,11 @@ public class Ellipse extends Shape {
         updateEllipse();
     }
 
+    /**
+     * Rotates the ellipse by a specified angle.
+     *
+     * @param rotationAngle The angle by which to rotate the ellipse.
+     */
     @Override
     public void rotate(double rotationAngle) {
         this.rotation += rotationAngle; // Update rotation
@@ -49,6 +71,9 @@ public class Ellipse extends Shape {
         updateEllipse();
     }
 
+    /**
+     * Updates the Ellipse2D object based on current attributes.
+     */
     private void updateEllipse() {
         double minX = Math.min(startPoint.getX(), endPoint.getX());
         double minY = Math.min(startPoint.getY(), endPoint.getY());
@@ -65,6 +90,12 @@ public class Ellipse extends Shape {
         setWebProperties((int) minX, (int) maxX, (int) minY, (int) maxY);
     }
 
+
+    /**
+     * Draws the ellipse shape on the graphics context.
+     *
+     * @param g The graphics context to draw on.
+     */
     @Override
     public void drawShape(Graphics2D g) {
         g.setPaint(fillColorModel);
@@ -88,6 +119,12 @@ public class Ellipse extends Shape {
         g.setTransform(oldTransform); // Restore the original transform
     }
 
+    /**
+     * Checks if a point is inside the ellipse.
+     *
+     * @param point The point to check.
+     * @return True if the point is inside the ellipse, false otherwise.
+     */
     @Override
     public boolean contains(Point point) {
         return ellipse.contains(point);
