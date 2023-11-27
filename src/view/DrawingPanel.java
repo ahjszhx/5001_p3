@@ -209,8 +209,12 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        shapeList = (List<Shape>) evt.getNewValue();
-        paintComponent(getGraphics());
+        Object newValue = evt.getNewValue();
+         shapeList = (List<Shape>) newValue;
+            paintComponent(getGraphics());
+        }
+//        shapeList = (List<Shape>) evt.getNewValue();
+//        paintComponent(getGraphics());
     }
 
     /**
