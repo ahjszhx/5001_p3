@@ -15,6 +15,10 @@ import java.util.List;
  */
 public class ServerConnect {
 
+    private static final String SERVER_ADDRESS = "cs5001-p3.dynv6.net";
+
+    private static final int SERVER_PORT = 8080;
+
     private static Socket socket;
 
     private static final List<Shape> serverShapes = new ArrayList<>();
@@ -27,10 +31,9 @@ public class ServerConnect {
      * Initializes the socket connection to the server.
      */
     public static void initializeSocket() {
-        String serverAddress = "cs5001-p3.dynv6.net";
-        int serverPort = 8080;
+
         try {
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
             String loginCommand = "{\"action\": \"login\", \"data\": {\"token\": \"49468b90-9ee2-4f75-81ae-a4d228ff2268\"}}";
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);

@@ -11,11 +11,11 @@
 Operation Demonstration of features above:
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/basicOperations.gif)
 7、Undo/redo: Including adding and deleting shapes, modifying shape colours, borderLine sizes, moving or rotating shapes
-
+![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/undoRedo.gif)
 8、Rotation of the line and rectangle/square/ellipse/triangle
 Input the rotation angle, then mouse click to select the graphic, and then click the rotate button to achieve the rotation.
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/rotation.gif)
-9、Select a previously drawn object and change its location, color or size
+9、Select a previously drawn object and change its location, color
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/SaveAndLoad.gif)
 Drag and drop to move the graphic, mouse click to select the graphic, you can modify the graphic colour and border attributes
 ![image](https://raw.githubusercontent.com/ahjszhx/5001_p3/main/changeLocationColor.gif)
