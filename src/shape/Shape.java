@@ -198,7 +198,26 @@ public abstract class Shape implements Serializable {
         this.rotation = rotation;
     }
 
-    public abstract Shape clone();
+
+    public Shape clone() {
+        Shape clonedShape = this.createShapeInstance();
+        clonedShape.setUuid(this.getUuid());
+        clonedShape.setInnerId(this.getInnerId());
+        clonedShape.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
+        clonedShape.setFillColorModel(new Color(this.fillColorModel.getRGB()));
+        clonedShape.setBorderWidth(this.borderWidth);
+        clonedShape.setRotation(this.rotation);
+        // Copy reference type properties
+        if (this.startPoint != null) {
+            clonedShape.setStartPoint(new Point(this.startPoint));
+        }
+        if (this.endPoint != null) {
+            clonedShape.setEndPoint(new Point(this.endPoint));
+        }
+        return clonedShape;
+    }
+
+    protected abstract Shape createShapeInstance();
 
 
 

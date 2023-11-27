@@ -45,7 +45,24 @@ public class Ellipse extends Shape {
     @Override
     public void rotate(double rotationAngle) {
         this.rotation += rotationAngle; // Update rotation
+        System.out.println("Ellipse rotation=>"+this.rotation);
         updateEllipse();
+    }
+
+    private void updateEllipse() {
+        double minX = Math.min(startPoint.getX(), endPoint.getX());
+        double minY = Math.min(startPoint.getY(), endPoint.getY());
+        double maxX = Math.max(startPoint.getX(), endPoint.getX());
+        double maxY = Math.max(startPoint.getY(), endPoint.getY());
+
+        if (this.lockRatio) {
+            double diameter = Math.min(maxX - minX, maxY - minY);
+            ellipse = new Ellipse2D.Double(minX, minY, diameter, diameter);
+        } else {
+            ellipse = new Ellipse2D.Double(minX, minY, maxX - minX, maxY - minY);
+        }
+
+        setWebProperties((int) minX, (int) maxX, (int) minY, (int) maxY);
     }
 
     @Override
@@ -60,7 +77,7 @@ public class Ellipse extends Shape {
         }
 
         AffineTransform oldTransform = g.getTransform(); // Save the current transform
-        g.rotate(rotation, ellipse.getCenterX(), ellipse.getCenterY()); // Apply rotation
+        g.rotate(Math.toRadians(rotation), ellipse.getCenterX(), ellipse.getCenterY()); // Apply rotation
         g.fill(ellipse);
 
         g.setColor(borderColorModel);
@@ -106,41 +123,10 @@ public class Ellipse extends Shape {
         return builder.build();
     }
 
-    private void updateEllipse() {
-        double minX = Math.min(startPoint.getX(), endPoint.getX());
-        double minY = Math.min(startPoint.getY(), endPoint.getY());
-        double maxX = Math.max(startPoint.getX(), endPoint.getX());
-        double maxY = Math.max(startPoint.getY(), endPoint.getY());
-
-        if (this.lockRatio) {
-            double diameter = Math.min(maxX - minX, maxY - minY);
-            ellipse = new Ellipse2D.Double(minX, minY, diameter, diameter);
-        } else {
-            ellipse = new Ellipse2D.Double(minX, minY, maxX - minX, maxY - minY);
-        }
-
-        setWebProperties((int) minX, (int) maxX, (int) minY, (int) maxY);
-    }
 
     @Override
-    public Ellipse clone() {
-        Ellipse ellipse = new Ellipse();
-        ellipse.setUuid(this.getUuid());
-        ellipse.setInnerId(this.getInnerId());
-        ellipse.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
-        ellipse.setFillColorModel(new Color(this.fillColorModel.getRGB()));
-        ellipse.setBorderWidth(this.borderWidth);
-        ellipse.setRotation(this.rotation);
-        // 复制引用类型属性
-        if (this.startPoint != null) {
-            ellipse.setStartPoint(new Point(this.startPoint));
-        }
-
-        if (this.endPoint != null) {
-            ellipse.setEndPoint(new Point(this.endPoint));
-        }
-
-        return ellipse;
+    protected Shape createShapeInstance() {
+        return new Ellipse();
     }
 
 

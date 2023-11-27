@@ -187,25 +187,10 @@ public class Line extends Shape {
         return builder.build();
     }
 
+
     @Override
-    public Line clone() {
-        Line clonedLine = new Line();
-        clonedLine.setUuid(this.getUuid());
-        clonedLine.setInnerId(this.getInnerId());
-        clonedLine.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
-        clonedLine.setFillColorModel(new Color(this.fillColorModel.getRGB()));
-        clonedLine.setBorderWidth(this.borderWidth);
-        clonedLine.setRotation(this.rotation);
-        // 复制引用类型属性
-        if (this.startPoint != null) {
-            clonedLine.setStartPoint(new Point(this.startPoint));
-        }
-
-        if (this.endPoint != null) {
-            clonedLine.setEndPoint(new Point(this.endPoint));
-        }
-
-        return clonedLine;
+    protected Shape createShapeInstance() {
+        return new Line();
     }
 
 

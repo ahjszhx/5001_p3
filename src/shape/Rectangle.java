@@ -170,25 +170,10 @@ public class Rectangle extends Shape {
         return builder.build();
     }
 
+
     @Override
-    public Rectangle clone() {
-        Rectangle rectangle = new Rectangle();
-        rectangle.setUuid(this.getUuid());
-        rectangle.setInnerId(this.getInnerId());
-        rectangle.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
-        rectangle.setFillColorModel(new Color(this.fillColorModel.getRGB()));
-        rectangle.setBorderWidth(this.borderWidth);
-        rectangle.setRotation(this.rotation);
-
-        if (this.startPoint != null) {
-            rectangle.setStartPoint(new Point(this.startPoint));
-        }
-
-        if (this.endPoint != null) {
-            rectangle.setEndPoint(new Point(this.endPoint));
-        }
-
-        return rectangle;
+    protected Shape createShapeInstance() {
+        return new Rectangle();
     }
 
     public int getWidth() {

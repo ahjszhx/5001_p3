@@ -21,8 +21,6 @@ public class Triangle extends Shape {
 
     private int y3;
 
-    //private int rotation = 0;
-
     private String borderColor;
 
     private String fillColor;
@@ -34,11 +32,11 @@ public class Triangle extends Shape {
     /**
      * Parameterized constructor for creating a Triangle object with specified attributes.
      *
-     * @param startPoint   The starting point of the triangle.
-     * @param endPoint     The ending point of the triangle.
-     * @param borderColor  The color of the triangle border.
-     * @param fillColor    The fill color of the triangle.
-     * @param borderWidth  The width of the triangle's border.
+     * @param startPoint  The starting point of the triangle.
+     * @param endPoint    The ending point of the triangle.
+     * @param borderColor The color of the triangle border.
+     * @param fillColor   The fill color of the triangle.
+     * @param borderWidth The width of the triangle's border.
      */
     public Triangle(Point startPoint, Point endPoint, Color borderColor, Color fillColor, float borderWidth) {
         super(startPoint, endPoint, borderColor, fillColor, borderWidth);
@@ -58,7 +56,7 @@ public class Triangle extends Shape {
 
     @Override
     public void rotate(double rotationAngle) {
-
+        this.rotation += rotationAngle;
     }
 
     /**
@@ -80,11 +78,28 @@ public class Triangle extends Shape {
         int y3 = (int) (startPoint.getY() - height);
 
         setWebProperties(x3, y3);
+        // 计算旋转后的坐标
+        double radians = Math.toRadians(rotation);
+        double cosTheta = Math.cos(radians);
+        double sinTheta = Math.sin(radians);
+
+        int centerX = (x1 + x2 + x3) / 3;
+        int centerY = (y1 + y2 + y3) / 3;
+
+        int newX1 = (int) (cosTheta * (x1 - centerX) - sinTheta * (y1 - centerY) + centerX);
+        int newY1 = (int) (sinTheta * (x1 - centerX) + cosTheta * (y1 - centerY) + centerY);
+
+        int newX2 = (int) (cosTheta * (x2 - centerX) - sinTheta * (y2 - centerY) + centerX);
+        int newY2 = (int) (sinTheta * (x2 - centerX) + cosTheta * (y2 - centerY) + centerY);
+
+        int newX3 = (int) (cosTheta * (x3 - centerX) - sinTheta * (y3 - centerY) + centerX);
+        int newY3 = (int) (sinTheta * (x3 - centerX) + cosTheta * (y3 - centerY) + centerY);
+
         // 创建Polygon对象，表示一个多边形
         Polygon triangle = new Polygon();
-        triangle.addPoint(x1, y1);
-        triangle.addPoint(x2, y2);
-        triangle.addPoint(x3, y3);
+        triangle.addPoint(newX1, newY1);
+        triangle.addPoint(newX2, newY2);
+        triangle.addPoint(newX3, newY3);
 
         // 设置填充颜色
         g2d.setColor(fillColorModel);
@@ -181,24 +196,8 @@ public class Triangle extends Shape {
     }
 
     @Override
-    public Triangle clone() {
-        Triangle triangle = new Triangle();
-        triangle.setUuid(this.getUuid());
-        triangle.setInnerId(this.getInnerId());
-        triangle.setBorderColorModel(new Color(this.borderColorModel.getRGB()));
-        triangle.setFillColorModel(new Color(this.fillColorModel.getRGB()));
-        triangle.setBorderWidth(this.borderWidth);
-        triangle.setRotation(this.rotation);
-        // 复制引用类型属性
-        if (this.startPoint != null) {
-            triangle.setStartPoint(new Point(this.startPoint));
-        }
-
-        if (this.endPoint != null) {
-            triangle.setEndPoint(new Point(this.endPoint));
-        }
-
-        return triangle;
+    protected Shape createShapeInstance() {
+        return new Triangle();
     }
 
     public int getX2() {
